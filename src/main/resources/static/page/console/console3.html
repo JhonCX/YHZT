@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>EasyWeb后台开发框架</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/module/admin.css?v=312"/>
+    <style>
+        .numberInfoSubTitle {
+            color: rgba(0, 0, 0, .45);
+            font-size: 14px;
+            height: 22px;
+            line-height: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+
+        .numberInfoValue {
+            color: rgba(0, 0, 0, .85);
+            font-size: 24px;
+            margin-top: 10px;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .numberInfoSuffix {
+            color: rgba(0, 0, 0, .65);
+            font-size: 16px;
+            font-style: normal;
+            margin-left: 4px;
+            line-height: 32px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+            <div class="layui-card" style="">
+                <div class="layui-card-header">活动实时交易情况</div>
+                <div class="layui-card-body">
+                    <div id="hdqkyc" style="height: 600px;">
+                    </div>
+                </div>
+            </div>
+
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/common.js?v=312"></script>
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+<script src="../../assets/libs/echarts/echartsTheme.js"></script>
+
+<script>
+    layui.use(['layer', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var element = layui.element;
+
+        // 渲染活动情况预测
+        var myCharts = echarts.init(document.getElementById('hdqkyc'), myEchartsTheme);
+        
+		
+		
+		    function randomData() {
+        return Math.round(Math.random()*510);
+    }
+    var mydata = [
+        {name: '北京',value: '100' },{name: '天津',value: randomData() },
+        {name: '上海',value: randomData() },{name: '重庆',value: randomData() },
+        {name: '河北',value: randomData() },{name: '河南',value: randomData() },
+        {name: '云南',value: randomData() },{name: '辽宁',value: randomData() },
+        {name: '黑龙江',value: randomData() },{name: '湖南',value: randomData() },
+        {name: '安徽',value: randomData() },{name: '山东',value: randomData() },
+        {name: '新疆',value: randomData() },{name: '江苏',value: randomData() },
+        {name: '浙江',value: randomData() },{name: '江',value: randomData() },
+        {name: '湖北',value: randomData() },{name: '广西',value: randomData() },
+        {name: '甘肃',value: randomData() },{name: '山西',value: randomData() },
+        {name: '内蒙古',value: randomData() },{name: '陕西',value: randomData() },
+        {name: '吉林',value: randomData() },{name: '福建',value: randomData() },
+        {name: '贵州',value: randomData() },{name: '广东',value: randomData() },
+        {name: '青海',value: randomData() },{name: '西藏',value: randomData() },
+        {name: '四川',value: randomData() },{name: '宁夏',value: randomData() },
+        {name: '海南',value: randomData() },{name: '台湾',value: randomData() },
+        {name: '香港',value: randomData() },{name: '澳门',value: randomData() }
+    ];
+    var option = {
+        backgroundColor: '#7894bd',
+        title: {
+            text: '全国地图大数据',
+            subtext: '',
+            x:'center',
+            textStyle: { color: '#ffffff' }
+        },
+        tooltip : { trigger: 'item' },
+
+        //左侧小导航图标
+        visualMap: {
+            show : true,
+            x: 'right',
+            y: 'bottom',
+            splitList: [
+                {start: 500, end:600},{start: 400, end: 500},
+                {start: 300, end: 400},{start: 200, end: 300},
+                {start: 100, end: 200},{start: 0, end: 100}
+            ],
+            textStyle: { color: '#ffffff' },
+            color: ['#5475f5', '#9feaa5', '#85daef','#74e2ca', '#e6ac53', '#9fb5ea']
+        },
+
+        //配置属性
+        series: [{
+            name: '数据',
+            type: 'map',
+            mapType: 'china',
+            roam: true,
+            label: {
+                normal: {
+                    show: true,  //省份名称
+                    textStyle: { color: '#ffffff' }
+                },
+                emphasis: { show: false }
+            },
+            data:mydata  //数据
+        }]
+    };
+		
+		
+		
+		
+		
+		
+		
+		
+		
+        myCharts.setOption(option);
+
+        
+
+        // 窗口大小改变事件
+        window.onresize = function () {
+            myCharts.resize();
+        };
+
+    });
+</script>
+</body>
+
+</html>

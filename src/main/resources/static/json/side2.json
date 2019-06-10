@@ -1,0 +1,50 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": [
+    {
+      "name": "用户管理",
+      "icon": "layui-icon layui-icon-user",
+      "url": "page/system/user.html"
+    },
+    {
+      "name": "商城管理",
+      "icon": "layui-icon layui-icon-layouts",
+      "url": "page/system/user3.html"
+    },
+    {
+      "name": "商城检索",
+      "icon": "layui-icon layui-icon-layouts",
+      "url": "javascript:;",
+      "subMenus": [
+        {
+          "name": "重复物品",
+          "url": "page/system/user6.html"
+        },
+        {
+          "name": "商城检索",
+          "url": "page/system/role2.html"
+        }
+      ]
+    },
+    {
+      "name": "永恒检索",
+      "icon": "layui-icon layui-icon-search\n",
+      "url": "javascript:;",
+      "subMenus": [
+        {
+          "name": "技能检索",
+          "url": "page/system/user5.html"
+        },
+        {
+          "name": "npc检索",
+          "url": "page/system/role1.html"
+        },
+        {
+          "name": "物品检索",
+          "url": "page/system/loginRecord.html"
+        }
+      ]
+    }
+  ]
+}

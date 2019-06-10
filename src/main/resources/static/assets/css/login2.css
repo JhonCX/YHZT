@@ -1,0 +1,43 @@
+body{
+    overflow:hidden
+}
+.layui-container{
+    width:100% !important;
+    height: 100% !important;
+    padding: 0!important;
+}
+.page-inner {
+    width: 1200px;
+    background: #fff;
+    margin: 0 auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+.my-login {
+    background-image: url(../images/bg.jpeg);
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    position: absolute;
+    height: 900px;
+    width: 1200px;
+}
+
+.layui-card {
+    max-width: 280px;
+    margin-top: 15em;
+    margin-left: 60%;
+    opacity: 0.8;
+}
+.layui-card-header {
+    font-weight: 700;
+    font-size: 15px;
+}
+.layui-form-pane .layui-form-label {
+    width: 48px;
+    overflow: visible;
+}
+
+.layui-form-pane .layui-input-block {
+    margin-left: 48px;
+}

@@ -1,0 +1,185 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 15,
+  "data": [
+    {
+      "accountId": 1,
+      "accountName": "admin",
+      "password": "822f69df5fff8f8983e69a515744a9df",
+      "name": "管理员",
+      "gmLevel": 10,
+      "avatar": null,
+      "id": 10,
+      "sex": "男",
+      "phone": "12345678901",
+      "email": null,
+      "emailVerified": null,
+      "trueName": null,
+      "idCard": null,
+      "birthday": null,
+      "departmentId": null,
+      "state": 0,
+      "createTime": "2018-07-21T10:03:40",
+      "updateTime": "2019-02-12T11:45:15",
+      "roles": [
+        {
+          "roleId": 1,
+          "roleName": "管理员",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        },
+        {
+          "roleId": 2,
+          "roleName": "普通用户",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        }
+      ]
+    },
+    {
+      "accountId": 2,
+      "accountName": "admin",
+      "password": "08b96cdc7dc85dc9e3511a991b6716f4",
+      "name": "用户一",
+      "avatar": null,
+      "sex": "男",
+      "phone": "12345678901",
+      "email": null,
+      "emailVerified": null,
+      "trueName": null,
+      "idCard": null,
+      "birthday": null,
+      "departmentId": null,
+      "state": 0,
+      "createTime": "2018-07-21T10:50:18",
+      "updateTime": "2019-02-11T15:16:33",
+      "roles": [
+        {
+          "roleId": 2,
+          "roleName": "普通用户",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        }
+      ]
+    },
+    {
+      "accountId": 3,
+      "accountName": "admin",
+      "password": "08b96cdc7dc85dc9e3511a991b6716f4",
+      "name": "用户二",
+      "avatar": null,
+      "sex": "女",
+      "phone": "12345678901",
+      "email": null,
+      "emailVerified": null,
+      "trueName": null,
+      "idCard": null,
+      "birthday": null,
+      "departmentId": null,
+      "state": 1,
+      "createTime": "2018-07-21T10:50:27",
+      "updateTime": "2019-02-12T11:49:58",
+      "roles": [
+        {
+          "roleId": 2,
+          "roleName": "普通用户",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        }
+      ]
+    },
+    {
+      "accountId": 4,
+      "accountName": "user03",
+      "password": "08b96cdc7dc85dc9e3511a991b6716f4",
+      "name": "用户三",
+      "avatar": null,
+      "sex": "男",
+      "phone": "12345678901",
+      "email": null,
+      "emailVerified": null,
+      "trueName": null,
+      "idCard": null,
+      "birthday": null,
+      "departmentId": null,
+      "state": 1,
+      "createTime": "2018-07-21T10:56:07",
+      "updateTime": "2019-02-12T14:45:30",
+      "roles": [
+        {
+          "roleId": 3,
+          "roleName": "游客",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        }
+      ]
+    },
+    {
+      "accountId": 5,
+      "accountName": "user04",
+      "password": "08b96cdc7dc85dc9e3511a991b6716f4",
+      "name": "用户四",
+      "avatar": null,
+      "sex": "男",
+      "phone": "12345678901",
+      "email": null,
+      "emailVerified": null,
+      "trueName": null,
+      "idCard": null,
+      "birthday": null,
+      "departmentId": null,
+      "state": 0,
+      "createTime": "2018-07-21T10:56:07",
+      "updateTime": "2019-02-12T14:45:30",
+      "roles": [
+        {
+          "roleId": 3,
+          "roleName": "游客",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        }
+      ]
+    },
+    {
+      "accountId": 6,
+      "accountName": "user05",
+      "password": "08b96cdc7dc85dc9e3511a991b6716f4",
+      "name": "用户五",
+      "avatar": null,
+      "sex": "男",
+      "phone": "12345678901",
+      "email": null,
+      "emailVerified": null,
+      "trueName": null,
+      "idCard": null,
+      "birthday": null,
+      "departmentId": null,
+      "state": 1,
+      "createTime": "2018-07-21T10:56:07",
+      "updateTime": "2019-02-12T14:45:30",
+      "roles": [
+        {
+          "roleId": 3,
+          "roleName": "游客",
+          "comments": null,
+          "isDelete": null,
+          "createTime": null,
+          "updateTime": null
+        }
+      ]
+    }
+  ]
+}

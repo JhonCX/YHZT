@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>右键菜单</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/module/admin.css?v=312"/>
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid text-center" style="padding-top: 50px;">
+    <div id="btnCtxMenu" style="width: 180px;height: 100px;background: white;display: inline-block;padding: 20px;">
+        请在此元素内单击鼠标右键
+    </div>
+    <br><br>
+    <p>请在其他范围内单击鼠标右键</p>
+    <br>
+    <button id="btnCtxMenu2" class="layui-btn">点击按钮显示菜单</button>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/common.js?v=312"></script>
+<script>
+    layui.use(['layer', 'contextMenu'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var contextMenu = layui.contextMenu;
+
+        // 重写右键菜单
+        contextMenu.bind('#btnCtxMenu', [{
+            name: '右键菜单一',
+            click: function () {
+                layer.msg('点击了右键菜单一', {icon: 1});
+            }
+        }, {
+            name: '右键菜单二',
+            click: function () {
+                layer.msg('点击了右键菜单二', {icon: 1});
+            }
+        }, {
+            icon: 'layui-icon layui-icon-more-vertical',
+            name: '右键菜单三',
+            subs: [{
+                name: '右键子菜单一',
+                click: function () {
+                    layer.msg('点击了右键子菜单一', {icon: 1});
+                }
+            }, {
+                name: '右键子菜单二',
+                click: function () {
+                    layer.msg('点击了右键子菜单二', {icon: 1});
+                }
+            }, {
+                name: '右键子菜单三',
+                subs: [{
+                    name: '右键三级菜单一',
+                    click: function () {
+                        layer.msg('点击了右键三级菜单一', {icon: 1});
+                    }
+                }, {
+                    name: '右键三级菜单二',
+                    click: function () {
+                        layer.msg('点击了右键三级菜单二', {icon: 1});
+                    }
+                }]
+            }]
+        }]);
+
+        // 重写右键菜单
+        contextMenu.bind('html', [{
+            icon: 'layui-icon layui-icon-refresh',
+            name: '刷新子页面',
+            click: function () {
+                location.reload();
+            }
+        }, {
+            name: '刷新主框架',
+            click: function () {
+                top.location.reload();
+            },
+            hr: true
+        }, {
+            icon: 'layui-icon layui-icon-snowflake',
+            name: '菜单一',
+            click: function () {
+                layer.msg('点击了菜单一', {icon: 1});
+            }
+        }, {
+            icon: 'layui-icon layui-icon-location',
+            name: '菜单二',
+            click: function () {
+                layer.msg('点击了菜单二', {icon: 1});
+            }
+        }, {
+            name: '菜单三',
+            subs: [{
+                name: '子菜单一',
+                click: function () {
+                    layer.msg('点击了子菜单一', {icon: 1});
+                }
+            }, {
+                name: '子菜单二',
+                click: function () {
+                    layer.msg('点击了子菜单二', {icon: 1});
+                }
+            }, {
+                name: '子菜单三',
+                subs: [{
+                    name: '三级菜单一',
+                    click: function () {
+                        layer.msg('点击了三级菜单一', {icon: 1});
+                    }
+                }, {
+                    name: '三级菜单二',
+                    subs: [{
+                        name: '四级菜单一',
+                        click: function () {
+                            layer.msg('点击了四级菜单一', {icon: 1});
+                        }
+                    }, {
+                        name: '四级菜单二',
+                        click: function () {
+                            layer.msg('点击了四级菜单二', {icon: 1});
+                        }
+                    }]
+                }]
+            }]
+        }, {
+            name: '菜单四',
+            click: function () {
+                layer.msg('点击了菜单四', {icon: 1});
+            }
+        }]);
+
+        // 直接使用show方法
+        $('#btnCtxMenu2').click(function (e) {
+            var x = $(this).offset().left;
+            var y = $(this).offset().top + $(this).outerHeight();
+            contextMenu.show([{
+                name: '按钮菜单一',
+                click: function () {
+                    layer.msg('点击了按钮菜单一', {icon: 1});
+                }
+            }, {
+                name: '按钮菜单二',
+                click: function () {
+                    layer.msg('点击了按钮菜单二', {icon: 1});
+                }
+            }, {
+                icon: 'layui-icon layui-icon-more-vertical',
+                name: '按钮菜单三',
+                subs: [{
+                    name: '按钮子菜单一',
+                    click: function () {
+                        layer.msg('点击了按钮子菜单一', {icon: 1});
+                    }
+                }, {
+                    name: '按钮子菜单二',
+                    click: function () {
+                        layer.msg('点击了按钮子菜单二', {icon: 1});
+                    }
+                }, {
+                    name: '按钮子菜单三',
+                    subs: [{
+                        name: '按钮三级菜单一',
+                        click: function () {
+                            layer.msg('点击了按钮三级菜单一', {icon: 1});
+                        }
+                    }, {
+                        name: '按钮三级菜单二',
+                        click: function () {
+                            layer.msg('点击了按钮三级菜单二', {icon: 1});
+                        }
+                    }]
+                }]
+            }], x, y);
+            if (e !== void 0) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
