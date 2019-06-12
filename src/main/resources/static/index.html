@@ -24,7 +24,7 @@
             <li class="layui-nav-item" lay-unselect>
                 <a ew-event="refresh" title="刷新"><i class="layui-icon layui-icon-refresh-3"></i></a>
             </li>
-            <li class="layui-nav-item layui-hide-xs layui-this" lay-unselect><a nav-bind="xt1">用户入口</a></li>
+            <li class="layui-nav-item layui-hide-xs layui-this" lay-unselect><a nav-bind="xt1" id="xt1">用户入口</a></li>
             <li class="layui-nav-item layui-hide-xs" lay-unselect><a nav-bind="xt2"
                                                                      lay-active="managementEntrance">管理入口</a>
             </li>
@@ -37,6 +37,11 @@
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" lay-unselect>
+                <a>
+                    <cite id="wallet">零用钱：未知</cite>
+                </a>
+            </li>
             <li class="layui-nav-item" lay-unselect>
                 <a ew-event="message" title="消息">
                     <i class="layui-icon layui-icon-notice"></i>
@@ -55,9 +60,8 @@
                     <cite>管理员</cite>
                 </a>
                 <dl class="layui-nav-child">
-                    <hr>
                     <dd lay-unselect>
-                        <a ew-event="logout" data-url="../login.html">退出</a>
+                        <a ew-event="logout" data-url="/logout">退出</a>
                     </dd>
                 </dl>
             </li>
@@ -126,8 +130,17 @@
         var util = layui.util;
         // 默认加载主页
         index.loadHome({
-            menuPath: 'page/console/welcome.html',
+            menuPath: '/welcome',
             menuName: '<i class="layui-icon layui-icon-home"></i>'
+        });
+
+        admin.ajax({
+            url: "/myWallet",
+            type: 'post',
+            dataType: 'json',
+            success: function(res){
+                $('#wallet').html("零用钱：" + res.msg);
+            }
         });
 
         util.event('lay-active', {
@@ -138,7 +151,7 @@
                     type: 'post',
                     dataType: 'json',
                     success: function(res){
-                        alert(res.code + '-' + res.msg);
+                        // alert(res.code + '-' + res.msg);
                         if (res.code === 1) {
                             $.get('json/side2.json', function (res) {
                                 laytpl(sideNav.innerHTML).render(res.data, function (html) {
@@ -147,21 +160,13 @@
                                 });
                             }, 'json');
                         } else {
-                            notice.error({
-                                title: '通知',
-                                position: 'center',
-                                transitionIn: 'fadeIn',
-                                transitionOut: 'fadeOut',
-                                timeout: '2000',
-                                progressBar: 'false',
-                                balloon: 'true',//气泡效果
-                                close: 'true',//关闭效果
-                                animateInside: 'true', //	文字动画效果
-                                theme: 'light',//主题 light、dark
-                                audio: '1',//音效	 1，2，3，4，5，6
-                                pauseOnHover: 'false',//鼠标滑过暂停消失时间
-                                resetOnHover: 'false',//鼠标滑过重置消失时间
-                                message: '没有权限！~'
+                            $('#xt1').click();
+                            index.openTab({
+                                title: '禁止访问',
+                                url: '/unauthcAdmin',
+                                end: function() {
+                                    // table.reload('userTable');
+                                }
                             });
                         }
                     }

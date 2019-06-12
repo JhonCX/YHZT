@@ -1,6 +1,6 @@
 ﻿/**
  * 表格扩展模块
- * date:2019-04-18   License By http://easyweb.vip
+ * date:2019-06-10   License By http://easyweb.vip
  */
 layui.define(['layer', 'table', 'laytpl', 'form', 'util', 'contextMenu'], function (exports) {
     var $ = layui.jquery;
@@ -14,7 +14,7 @@ layui.define(['layer', 'table', 'laytpl', 'form', 'util', 'contextMenu'], functi
     var tbSearchAttr = 'tb-search';  // 前端搜索属性
     var tbRefreshAttr = 'tb-refresh';  // 刷新按鈕属性
     var tbExportAttr = 'tb-export';  // 导出按鈕属性
-    var txFieldPre = 'txField_';  // templte列file前缀
+    var txFieldPre = 'txField_';  // templte列filed前缀
 
     var tableX = {
         // 合并相同单元格
@@ -184,30 +184,45 @@ layui.define(['layer', 'table', 'laytpl', 'form', 'util', 'contextMenu'], functi
                 }
             }
             if (param.url) {  // url方式
+                var xParam = tableX.deepClone(param);
+                xParam.data = [], xParam.url = '';
+                insTb = table.render(xParam);  // 先渲染表格结构
+                // 提供刷新方法
+                insTb.reloadUrl = function (p) {
+                    var reParam = tableX.deepClone(param);
+                    p && (reParam = $.extend(reParam, p));
+                    var loadIndex = layer.msg('加载中..', {icon: 16, shade: 0.01, time: 0});
+                    tableX.loadUrl(reParam, function (data) {  // 获取url数据
+                        layer.close(loadIndex);
+                        tableX.parseTbData(reParam.cols, data);  // 解析temple列
+                        tableX.putTbData(tableId, data);  // 缓存数据
+                        $('input[' + tbSearchAttr + '="' + tableId + '"]').val('');  // 清空搜索输入框
+                        window.tbX.cacheSearch[tableId] = undefined;  // 重置搜索结果
+                        insTb.reload({url: '', data: data, page: {curr: 1}});
+                    });
+                };
+                // 请求数据
                 var loadIndex = layer.msg('加载中..', {icon: 16, shade: 0.01, time: 0});
                 tableX.loadUrl(param, function (data) {  // 获取url数据
                     layer.close(loadIndex);
-                    var xParam = tableX.deepClone(param);
-                    xParam.data = data, xParam.url = '';
-                    insTb = tableX.renderFront(xParam);  // 渲染表格
-                    insTb.reloadUrl = function (p) {  // 提供刷新方法
-                        var reParam = tableX.deepClone(param);
-                        p && (reParam = $.extend(reParam, p));
-                        var loadIndex = layer.msg('加载中..', {icon: 16, shade: 0.01, time: 0});
-                        tableX.loadUrl(reParam, function (data) {  // 获取url数据
-                            layer.close(loadIndex);
-                            tableX.parseTbData(reParam.cols, data);  // 解析temple列
-                            tableX.putTbData(tableId, data);  // 缓存数据
-                            $('input[' + tbSearchAttr + '="' + tableId + '"]').val('');  // 清空搜索输入框
-                            insTb.reload({url: '', data: data, page: {curr: 1}});
-                        });
-                    };
+                    tableX.parseTbData(param.cols, data);  // 解析temple列
+                    tableX.putTbData(tableId, data);  // 缓存数据
+                    insTb.reload({url: '', data: data, page: {curr: 1}});
                 });
+                tableX.renderAllTool(insTb);  // 渲染工具组件
             } else {
                 tableX.parseTbData(param.cols, param.data);  // 解析temple列
                 tableX.putTbData(tableId, param.data);  // 缓存数据
                 insTb = table.render(param);  // 渲染表格
                 tableX.renderAllTool(insTb);  // 渲染工具组件
+                // 提供刷新的方法
+                insTb.reloadData = function (p) {
+                    insTb.reload(p);
+                    tableX.parseTbData(param.cols, p.data);  // 解析temple列
+                    tableX.putTbData(tableId, p.data);
+                    $('input[' + tbSearchAttr + '="' + tableId + '"]').val('');  // 清空搜索输入框
+                    window.tbX.cacheSearch[tableId] = undefined;  // 重置搜索结果
+                };
             }
             return insTb;
         },

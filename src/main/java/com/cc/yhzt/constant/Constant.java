@@ -45,8 +45,13 @@ public class Constant {
     //登录类型
     public final static String LOGIN_TYPE = "loginType";
 
-    //gm账户名
-    public final static String ADMIN_ACCOUNT = "gm";
+    //gm账户
+    public final static String ADMIN_ACCOUNT = "ADMIN_ACCOUNT";
+    //玩家账户
+    public final static String PLAYER_ACCOUNT = "PLAYER_ACCOUNT";
+    //全部账户
+    public static final String ALL_ACCOUNT = "ALL_ACCOUNT";
+
 
     //礼物接收者
     public final static String GIFT_RECEIVE_NAME = "giftReceiveName";

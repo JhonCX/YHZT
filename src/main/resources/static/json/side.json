@@ -5,26 +5,12 @@
     {
       "name": "首页",
       "icon": "layui-icon layui-icon-home",
-      "url": "page/console/welcome.html"
+      "url": "/welcome"
     },
     {
       "name": "商品",
       "icon": "layui-icon layui-icon-cart-simple",
-      "url": "javascript:;",
-      "subMenus": [
-        {
-          "name": "用户管理",
-          "url": "page/system/user1.html"
-        },
-        {
-          "name": "角色管理",
-          "url": "page/system/role.html"
-        },
-        {
-          "name": "登录日志",
-          "url": "page/system/loginRecord.html"
-        }
-      ]
+      "url": "/shop"
     }
   ]
 }

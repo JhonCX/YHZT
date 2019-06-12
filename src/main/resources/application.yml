@@ -1,0 +1,69 @@
+
+spring:
+  application:
+    name: webshop
+  mvc:
+    view:
+      # 页面默认前缀目录
+      # 响应页面默认后缀
+      suffix: .html
+      prefix: classpath:/templates/
+    static-path-pattern: /static/**
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy/MM/dd HH:mm:ss
+  datasource:
+    dynamic:
+      druid: #以下是全局默认值，可以全局更改
+        # 初始连接数
+        initialSize: 5
+        # 最小连接池数量
+        minIdle: 5
+        # 最大连接池数量
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 配置一个连接在池中最大生存的时间，单位是毫秒
+        maxEvictableIdleTimeMillis: 900000
+        # 配置检测连接是否有效
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall # 注意这个值和druid原生不一致，默认启动了stat,wall
+        stat:
+          merge-sql: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+        wall:
+          multi-statement-allow: true
+      datasource:
+        master:
+          username: root
+          password: aion
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/al_server_gs?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
+        ls:
+          username: root
+          password: aion
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/al_server_ls?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
+# Logger Config
+logging:
+  level:
+    com.cc.yhzt.mapper.*: debug
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/aion/*Mapper.xml
+
+item:
+  id: 186000030
+server:
+  servlet:
+    context-path: /

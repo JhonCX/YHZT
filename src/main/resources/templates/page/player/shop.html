@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>左树右表</title>
+    <link rel="stylesheet" href="../../../static/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../../static/assets/module/dtree/dtree.css"/>
+    <link rel="stylesheet" href="../../../static/assets/module/dtree/font/dtreefont.css"/>
+    <link rel="stylesheet" href="../../../static/assets/module/admin.css?v=312"/>
+    <style>
+        #treeTbTree {
+            height: auto;
+            overflow: auto;
+        }
+
+        @media screen and (max-width: 750px) {
+            #treeTbTree {
+                height: auto;
+            }
+        }
+
+        /** dtree选中颜色重写 */
+        .dtree-theme-item-this {
+            background-color: #eeeeee !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <!-- 左树 -->
+        <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
+            <div class="layui-card">
+                <div class="layui-card-body mini-bar" id="treeTbTree">
+                </div>
+            </div>
+        </div>
+        <!-- 右表 -->
+        <div class="layui-col-sm12 layui-col-md9 layui-col-lg10">
+            <div class="layui-card">
+                <div class="layui-card-body" style="min-height: 535px;">
+
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">搜索：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input name="keyword" class="layui-input" type="text" id="shop_search"
+                                           placeholder="输入关键字"/>
+                                </div>
+                                <button class="layui-btn icon-btn" lay-filter="formSubSearchTbLtrt" lay-submit>
+                                    <i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                            </div>
+                            <div class="layui-inline demoTable pull-right">
+                                <button class="layui-btn icon-btn" data-type="batchBuy">
+                                    <i class="layui-icon">&#xe654;</i>批量购买
+                                </button>
+                                <button class="layui-btn layui-btn-danger icon-btn" data-type="batchGift">
+                                    <i class="layui-icon">&#xe640;</i>批量赠送
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="tableTbTree" lay-filter="tableTbTree"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="modelUser">
+    <form id="modelUserForm" lay-filter="modelUserForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">赠送</label>
+            <div class="layui-input-block">
+                <input name="giftName" placeholder="请输入要赠送的角色" type="text" class="layui-input" maxlength="20"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="modelSubmitUser" lay-submit>赠送</button>
+        </div>
+    </form>
+</script>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarTbTree">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="buy">购买</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="gift">赠送</a>
+</script>
+
+<script type="text/html" id="raceInfo">
+    {{#if (d.race == 1) { }}
+    <span>天族</span>
+    {{# }else if(d.race == -1){ }}
+    <span>魔族</span>
+    {{# }else if(d.race == 0){ }}
+    <span>通用</span>
+    {{# } }}
+</script>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../../static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../../static/assets/js/common.js?v=312"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin', 'index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var dtree = layui.dtree;
+        var admin = layui.admin;
+        var index = layui.index;
+
+        // 渲染表格
+        var insTb = table.render({
+            elem: '#tableTbTree',
+            url: '/shopList',
+            page: true,
+            cellMinWidth: 100,
+            limit: 15,
+            limits: [15,30, 50, 100],
+            id: 'idTest',
+            text: {
+                none: '暂无数据，请点击左侧菜单' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+            },
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'id', align: 'center', sort: true, title: '序号'},
+                    {field: 'itemId', align: 'center', sort: true, title: '物品id'},
+                    {field: 'itemName', align: 'center', sort: true, title: '物品名称', minWidth: 250},
+                    {field: 'itemCount', align: 'center', sort: true, title: '默认数量'},
+                    {field: 'race', align: 'center', sort: true, title: '种族', templet: '#raceInfo'},
+                    {field: 'itemPrice', align: 'center', sort: true, title: '价格'},
+                    {field: 'description', align: 'center', sort: true, title: '物品描述', minWidth: 200},
+                    {align: 'center', toolbar: '#tableBarTbTree', title: '操作', minWidth: 120}
+                ]
+            ]
+        });
+
+        // 树形渲染
+        dtree.render({
+            elem: '#treeTbTree',
+            icon: '6',
+            url: '/menu',
+            type: 'load',
+            initLevel: '2',
+            dot: false,
+            method: 'GET',
+            ficon: "1"
+        });
+
+        // 树形点击事件
+        dtree.on('node("treeTbTree")', function (obj) {
+            var data = obj.param;
+            var level = data.level;
+            console.log(level);
+            layer.msg('你选择了：' + data.context);
+            $('#shop_search').val('');
+            if (level === '3') {
+                insTb.reload({
+                    where: {
+                        nodeId: data.nodeId,
+                        keyword: ''
+                    }
+                }, 'data');
+            }
+        });
+
+        // 搜索按钮点击事件
+        form.on('submit(formSubSearchTbLtrt)', function (data) {
+            insTb.reload({where: data.field}, 'data');
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(tableTbTree)', function (obj) {
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(tableTbTree)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'buy') {
+                layer.confirm('是否购买 "' + data.itemName + '" ？', function (index) {
+                    admin.ajax({
+                        url: "/buy",
+                        type: 'post',
+                        data: {id: data.id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code === 0) {
+                                var wallet = window.top.document.getElementById("wallet");
+                                wallet.innerHTML = "零用钱：" + res.data;
+                                layer.msg(res.msg, {icon: 1});
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+                // layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if (obj.event === 'gift') {
+                admin.open({
+                    type: 1,
+                    title: '赠送',
+                    content: $('#modelUser').html(),
+                    success: function (layero, dIndex) {
+                        $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                        var url = '/gift';
+                        // 回显数据
+                        form.val('modelUserForm', data);
+                        // 表单提交事件
+                        form.on('submit(modelSubmitUser)', function (data) {
+                            layer.load(2);
+                            $.get(url, data.field, function (res) {
+                                layer.closeAll('loading');
+                                if (res.code === 0) {
+                                    // $('#wallet').html("零用钱：" + res.data);
+                                    var wallet = window.top.document.getElementById("wallet");
+                                    wallet.innerHTML = "零用钱：" + res.data;
+                                    layer.close(dIndex);
+                                    layer.msg(res.msg, {icon: 1});
+                                } else {
+                                    layer.msg(res.msg, {icon: 2});
+                                }
+                            }, 'json');
+                            return false;
+                        });
+                    }
+                });
+            } else if (obj.event === 'edit') {
+                layer.alert('编辑行：<br>' + JSON.stringify(data))
+            }
+        });
+
+        var $ = layui.$, active = {
+            batchBuy: function () { //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg("请先选择商品~", {icon: 2});
+                    return false;
+                } else {
+                    var ids = "";
+                    var itemName = [];
+                    data.forEach(function (item) {
+                        ids += item.id + "_";
+                        itemName.push("  ⭐" + item.itemName + "⭐  </br>");
+                    });
+                    layer.confirm('是否购买 </br>"' + itemName + '"', function (index) {
+                        admin.ajax({
+                            url: "/batchBuy",
+                            type: 'post',
+                            data: {ids: ids},
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code === 0) {
+                                    var wallet = window.top.document.getElementById("wallet");
+                                    wallet.innerHTML = "零用钱：" + res.data;
+                                    layer.msg(res.msg, {icon: 1});
+                                } else {
+                                    layer.msg(res.msg, {icon: 2});
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                    // layer.alert(JSON.stringify(ids));
+                }
+            }
+            , batchGift: function () { //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg("请先选择商品~", {icon: 2});
+                    return false;
+                } else {
+                    admin.open({
+                        type: 1,
+                        title: '批量赠送',
+                        content: $('#modelUser').html(),
+                        success: function (layero, dIndex) {
+                            $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                            var url = '/batchGift';
+                            // 回显数据
+                            form.val('modelUserForm', data);
+                            // 表单提交事件
+                            form.on('submit(modelSubmitUser)', function (data2) {
+                                layer.load(2);
+                                var ids = "";
+                                var itemName = [];
+                                data.forEach(function (item) {
+                                    ids += item.id + "_";
+                                    itemName.push("  ⭐" + item.itemName + "⭐  </br>");
+                                });
+                                layer.confirm('是否赠送 </br>"' + itemName + '"', function (index) {
+                                    admin.ajax({
+                                        url: "/batchGift",
+                                        type: 'post',
+                                        data: {ids: ids,giftName:data2.field.giftName},
+                                        dataType: 'json',
+                                        success: function (res) {
+                                            if (res.code === 0) {
+                                                var wallet = window.top.document.getElementById("wallet");
+                                                wallet.innerHTML = "零用钱：" + res.data;
+                                                layer.msg(res.msg, {icon: 1});
+                                            } else {
+                                                layer.msg(res.msg, {icon: 2});
+                                            }
+                                        }
+                                    });
+                                    layer.close(index);
+                                });
+                                layer.closeAll('page');
+                                return false;
+                            });
+                        }
+                    });
+                    // layer.alert(JSON.stringify(ids));
+                }
+            }
+            , getCheckLength: function () { //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.msg('选中了：' + data.length + ' 个');
+            }
+            , isAll: function () { //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+
+</html>

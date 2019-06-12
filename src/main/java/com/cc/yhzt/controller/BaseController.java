@@ -1,13 +1,17 @@
 package com.cc.yhzt.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cc.yhzt.constant.Constant;
-import com.cc.yhzt.entity.Players;
-import com.cc.yhzt.entity.ShopList;
-import com.cc.yhzt.entity.Surveys;
-import com.cc.yhzt.entity.UserInfo;
+import com.cc.yhzt.constant.RestBean;
+import com.cc.yhzt.define.SystemParams;
+import com.cc.yhzt.entity.*;
+import com.cc.yhzt.service.IInventoryService;
+import com.cc.yhzt.service.IPlayersService;
 import com.cc.yhzt.service.ISurveysService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -29,6 +33,12 @@ public class BaseController {
     private HttpServletRequest request;
     @Resource
     private HttpServletResponse response;
+    @Resource
+    private IInventoryService inventoryService;
+    @Resource
+    private SystemParams systemParams;
+    @Resource
+    private IPlayersService playersService;
 
     public UserInfo getUserByCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -53,21 +63,6 @@ public class BaseController {
         }
     }
 
-    public boolean giveSurvey(Integer ownerId, List<ShopList> shopList) {
-        List<Surveys> surveysList = new ArrayList<>();
-        for (ShopList shop : shopList) {
-            Surveys survey = new Surveys();
-            survey.setHtmlRadio("唱 跳 rap 篮球!");
-            survey.setHtmlText("听说打篮球缺人?");
-            survey.setItemId(shop.getItemId());
-            survey.setOwnerId(ownerId);
-            survey.setUsed(false);
-            survey.setUsedTime("");
-            survey.setItemCount(shop.getItemCount());
-            surveysList.add(survey);
-        }
-        return surveysService.saveBatch(surveysList);
-    }
 
     public void addCookie(String username, String gamename, HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
         if (StringUtils.isNotBlank(username) && StringUtils.isNoneBlank(gamename)) {
@@ -113,8 +108,106 @@ public class BaseController {
 
 
     public Page getPage() {
-        long page = Long.parseLong(request.getParameter("page"));
-        long limit = Long.parseLong(request.getParameter("limit"));
-        return new Page(page,limit);
+        long page = Long.parseLong(null == request.getParameter("page") ? "1" : request.getParameter("page"));
+        long limit = Long.parseLong(null == request.getParameter("limit") ? "10" : request.getParameter("limit"));
+        return new Page(page, limit);
+    }
+
+    public WalletEntity getWallet() {
+        WalletEntity walletEntity = new WalletEntity();
+        Subject subject = SecurityUtils.getSubject();
+        Players players = (Players) subject.getPrincipal();
+        Integer id = players.getId();
+        List<Inventory> moneys = inventoryService.list(new QueryWrapper<>(new Inventory().setItemOwner(id).setItemId(systemParams.getId())));
+        Long count = 0L;
+        for (Inventory money : moneys) {
+            count += money.getItemCount();
+        }
+        walletEntity.setAllMoney(count);
+        walletEntity.setUser(players);
+        walletEntity.setMoneys(moneys);
+        return walletEntity;
+    }
+
+
+    /**
+     * 是否出售 1为出售 2为余额不足 0为错误
+     */
+    public Sale isSale(Long shopPrice, List<ShopList> shopList, Boolean isGift ,Players giftPlayer) {
+        WalletEntity wallet = getWallet();
+        Sale sale = new Sale();
+        sale.setCost(0L);
+        sale.setFlag(2);
+        sale.setWallet(wallet.getAllMoney());
+        if (wallet.getAllMoney() >= shopPrice) {
+            if (costMoney(wallet.getUser().getId(), wallet.getMoneys(), shopPrice)) {
+                sale.setFlag(1);
+                sale.setCost(shopPrice);
+                sale.setWallet(wallet.getAllMoney()-shopPrice);
+                if (!isGift) {
+                    boolean b = giveSurvey(wallet.getUser(), shopList);
+                    if (!b) {
+                        sale.setFlag(0);
+                    }
+                } else {
+                    boolean b = giveSurvey(giftPlayer, shopList);
+                    if (!b) {
+                        sale.setFlag(0);
+                    }
+                }
+
+            }
+        } else {
+            sale.setCost(0L);
+            sale.setFlag(2);
+        }
+        return sale;
+    }
+
+    public Boolean costMoney(Integer itemOwner,List<Inventory> moneys,Long cost) {
+        for (Inventory money : moneys) {
+            if (cost < money.getItemCount()) {
+                money.setItemCount(money.getItemCount() - cost);
+                return inventoryService.updateById(money);
+            } else if (cost.equals(money.getItemCount())) {
+                return inventoryService.removeById(money.getItemUniqueId());
+            } else if (cost > money.getItemCount()) {
+                cost = cost - money.getItemCount();
+                inventoryService.removeById(money.getItemUniqueId());
+            }
+        }
+        return false;
+    }
+
+    public boolean giveSurvey(Players user, List<ShopList> shopList) {
+        List<Surveys> surveysList = new ArrayList<>();
+        for (ShopList shop : shopList) {
+            Surveys survey = new Surveys();
+            survey.setHtmlRadio("我是唱跳时长两年半的 '"+user.getName()+"' ~!");
+            survey.setHtmlText("听说打篮球缺人?");
+            survey.setItemId(shop.getItemId());
+            survey.setOwnerId(user.getId());
+            survey.setUsed(false);
+            survey.setUsedTime("");
+            survey.setItemCount(shop.getItemCount());
+            surveysList.add(survey);
+        }
+        return surveysService.saveBatch(surveysList);
+    }
+
+
+    public RestBean shopResult(Long shopPrice,List<ShopList> shopList,Boolean isGift,Players giftPlayer) {
+        Sale sale = isSale(shopPrice,shopList,isGift,giftPlayer);
+        if (1 == sale.getFlag()) {
+            if (isGift) {
+                return new RestBean(0, "赠送成功！", sale.getWallet() + "");
+            } else {
+                return new RestBean(0, "购买成功！", sale.getWallet() + "");
+            }
+        } else if (2 == sale.getFlag()) {
+            return new RestBean(-1, "失败，余额不足！");
+        } else {
+            return new RestBean(-1, "失败，未知错误！");
+        }
     }
 }

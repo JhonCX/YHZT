@@ -28,10 +28,10 @@ public class RestBean {
         this.data = data;
     }
 
-    public RestBean(int code, String msg,Long count, Object data) {
+    public RestBean(int code, String msg,Long total, Object data) {
         this.code = code;
         this.msg = msg;
-        this.count=count;
+        this.count=total;
         this.data = data;
     }
 }

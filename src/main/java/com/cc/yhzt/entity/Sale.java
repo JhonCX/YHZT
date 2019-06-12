@@ -9,5 +9,6 @@ import lombok.Data;
 @Data
 public class Sale {
     Integer flag;
-    Integer wallet;
+    Long wallet;
+    Long cost;
 }
