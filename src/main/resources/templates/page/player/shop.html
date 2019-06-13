@@ -42,7 +42,7 @@
         <!-- 左树 -->
         <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
             <div class="layui-card">
-                <div class="layui-card-body mini-bar" id="treeTbTree">
+                <div class="layui-card-body mini-bar" id="treeTbTree" data-id="0">
                 </div>
             </div>
         </div>
@@ -135,7 +135,7 @@
             page: true,
             cellMinWidth: 100,
             limit: 15,
-            limits: [15,30, 50, 100],
+            limits: [15, 30, 50, 100],
             id: 'idTest',
             text: {
                 none: '暂无数据，请点击左侧菜单' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
@@ -156,7 +156,7 @@
         });
 
         // 树形渲染
-        dtree.render({
+        var treeTbTree = dtree.render({
             elem: '#treeTbTree',
             icon: '6',
             url: '/menu',
@@ -164,14 +164,19 @@
             initLevel: '2',
             dot: false,
             method: 'GET',
-            ficon: "1"
+            ficon: "1",
+            dataFormat: "list",  //配置data的风格为list
+            record: true
         });
 
         // 树形点击事件
         dtree.on('node("treeTbTree")', function (obj) {
+            if (!obj.param.leaf) {
+                var $div = obj.dom;
+                treeTbTree.clickSpread($div);  //调用内置函数展开节点
+            }
             var data = obj.param;
             var level = data.level;
-            console.log(level);
             layer.msg('你选择了：' + data.context);
             $('#shop_search').val('');
             if (level === '3') {
@@ -238,6 +243,7 @@
                                     layer.close(dIndex);
                                     layer.msg(res.msg, {icon: 1});
                                 } else {
+                                    layer.close(dIndex);
                                     layer.msg(res.msg, {icon: 2});
                                 }
                             }, 'json');
@@ -314,21 +320,25 @@
                                     admin.ajax({
                                         url: "/batchGift",
                                         type: 'post',
-                                        data: {ids: ids,giftName:data2.field.giftName},
+                                        data: {ids: ids, giftName: data2.field.giftName},
                                         dataType: 'json',
                                         success: function (res) {
                                             if (res.code === 0) {
                                                 var wallet = window.top.document.getElementById("wallet");
                                                 wallet.innerHTML = "零用钱：" + res.data;
                                                 layer.msg(res.msg, {icon: 1});
+                                                layer.close(index);
+                                                layer.closeAll('page');
+                                                layer.closeAll('loading');
                                             } else {
                                                 layer.msg(res.msg, {icon: 2});
+                                                layer.close(index);
+                                                layer.closeAll('page');
+                                                layer.closeAll('loading');
                                             }
                                         }
                                     });
-                                    layer.close(index);
                                 });
-                                layer.closeAll('page');
                                 return false;
                             });
                         }

@@ -14,25 +14,18 @@ layui.config({
     citypicker: 'city-picker/city-picker',
     tableSelect: 'tableSelect/tableSelect',
     cropper: 'cropper/cropper',
-    zTree: 'zTree/zTree',
+    zTree: 'zTree/zTree'
 }).use(['layer', 'admin'], function () {
     var $ = layui.jquery;
     var layer = layui.layer;
     var admin = layui.admin;
 
-
-    admin.getAjaxHeaders = function (requestUrl) {
-        var headers = new Array();
-        headers.push({name: 'Content-Type', value: 'application/x-www-form-urlencoded;charset=UTF-8'});
-        return headers;
-    };
     // 移除loading动画
     setTimeout(function () {
         admin.removeLoading();
     }, window == top ? 600 : 100);
 
 });
-
 
 // 获取当前项目的根路径，通过获取layui.js全路径截取assets之前的地址
 function getProjectUrl() {
@@ -50,4 +43,3 @@ function getProjectUrl() {
     }
     return layuiDir.substring(0, layuiDir.indexOf('assets'));
 }
-

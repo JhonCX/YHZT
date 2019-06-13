@@ -141,16 +141,6 @@
             }
         });
 
-        // // 添加
-        // $('#btnAddUser').click(function () {
-        //     showEditModel();
-        // });
-
-        // // 搜索
-        // form.on('submit(formSubSearchUser)', function (data) {
-        //     insTb.reload({where: data.field}, 'data');
-        // });
-
         // 工具条点击事件
         table.on('tool(tableUser)', function (obj) {
             var data = obj.data;
@@ -178,22 +168,7 @@
                             layer.closeAll('loading');
                             if (res.code == 200) {
                                 layer.close(dIndex);
-                                notice.success({
-                                    title: '通知',
-                                    position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
-                                    transitionIn:'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
-                                    transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
-                                    timeout: '1000', //显示时间
-                                    progressBar: 'false',//进度条
-                                    balloon: 'true',//气泡效果
-                                    close:'true',//关闭效果
-                                    animateInside: 'true', //	文字动画效果
-                                    theme:'light',//主题 light、dark
-                                    audio:'0',//音效	 1，2，3，4，5，6
-                                    pauseOnHover:'false',//鼠标滑过暂停消失时间
-                                    resetOnHover: 'false',//鼠标滑过重置消失时间
-                                    message: res.msg,
-                                });
+                                successNotice(res);
                                 $('#refresh-user').click();
                             } else {
                                 layer.msg(res.msg, {icon: 2});
@@ -215,40 +190,10 @@
             }, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
-                    notice.success({
-                        title: '通知',
-                        position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
-                        transitionIn:'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
-                        transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
-                        timeout: '1000', //显示时间
-                        progressBar: 'false',//进度条
-                        balloon: 'true',//气泡效果
-                        close:'true',//关闭效果
-                        animateInside: 'true', //	文字动画效果
-                        theme:'light',//主题 light、dark
-                        audio:'0',//音效	 1，2，3，4，5，6
-                        pauseOnHover:'false',//鼠标滑过暂停消失时间
-                        resetOnHover: 'false',//鼠标滑过重置消失时间
-                        message: res.msg,
-                    });
+                    successNotice(res);
                     $('#refresh-user').click();
                 }else if (res.code == 1) {
-                    notice.warning({
-                        title: '通知',
-                        position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
-                        transitionIn:'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
-                        transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
-                        timeout: '1000', //显示时间
-                        progressBar: 'false',//进度条
-                        balloon: 'true',//气泡效果
-                        close:'true',//关闭效果
-                        animateInside: 'true', //	文字动画效果
-                        theme:'light',//主题 light、dark
-                        audio:'0',//音效	 1，2，3，4，5，6
-                        pauseOnHover:'false',//鼠标滑过暂停消失时间
-                        resetOnHover: 'false',//鼠标滑过重置消失时间
-                        message: res.msg,
-                    });
+                    warningNotice(res);
                     $('#refresh-user').click();
                 } else {
                     layer.msg(res.msg, {icon: 2});
@@ -257,6 +202,42 @@
                 }
             }, 'json');
         });
+        function warningNotice(res) {
+            notice.warning({
+                title: '通知',
+                position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
+                transitionIn:'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
+                transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
+                timeout: '1000', //显示时间
+                progressBar: 'false',//进度条
+                balloon: 'true',//气泡效果
+                close:'true',//关闭效果
+                animateInside: 'true', //	文字动画效果
+                theme:'light',//主题 light、dark
+                audio:'1',//音效	 1，2，3，4，5，6
+                pauseOnHover:'false',//鼠标滑过暂停消失时间
+                resetOnHover: 'false',//鼠标滑过重置消失时间
+                message: res.msg
+            });
+        }
+        function successNotice(res) {
+            notice.success({
+                title: '通知',
+                position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
+                transitionIn:'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
+                transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
+                timeout: '1000', //显示时间
+                progressBar: 'false',//进度条
+                balloon: 'true',//气泡效果
+                close:'true',//关闭效果
+                animateInside: 'true', //	文字动画效果
+                theme:'light',//主题 light、dark
+                audio:'1',//音效	 1，2，3，4，5，6
+                pauseOnHover:'false',//鼠标滑过暂停消失时间
+                resetOnHover: 'false',//鼠标滑过重置消失时间
+                message: res.msg
+            });
+        }
     });
 </script>
 

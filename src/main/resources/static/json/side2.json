@@ -16,11 +16,6 @@
       "name": "商城检索",
       "icon": "layui-icon layui-icon-layouts",
       "url": "/repeatItem"
-    },
-    {
-      "name": "永恒检索",
-      "icon": "layui-icon layui-icon-search\n",
-      "url": "javascript:;"
     }
   ]
 }

@@ -44,8 +44,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Players player = (Players) principals.getPrimaryPrincipal();
-        String username = player.getAccountName();
+        String username = (String) principals.getPrimaryPrincipal();
         // 从数据库或者缓存中获得角色数据
         Set<String> roles = new HashSet<>();
         Set<String> permissions = new HashSet<>();
@@ -76,6 +75,10 @@ public class CustomRealm extends AuthorizingRealm {
         String gamename = new String((char[])token.getCredentials()).toLowerCase();
         // 2.通过用户名到数据库中获取凭证
         Players player = playersService.getOne(new QueryWrapper<>(new Players().setAccountName(username).setName(gamename)));
+        AccountData accountData = accountDataService.getById(player.getAccountId());
+        if (0 == accountData.getActivated()) {
+            return null;
+        }
         if (null == player) {
             return null;
         }
@@ -83,7 +86,7 @@ public class CustomRealm extends AuthorizingRealm {
         if(password == null) {
             return null;
         }
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(player, password, ClassName);
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username, password, ClassName);
         return simpleAuthenticationInfo;
     }
 }

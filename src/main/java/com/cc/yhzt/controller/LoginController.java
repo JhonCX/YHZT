@@ -2,6 +2,7 @@ package com.cc.yhzt.controller;
 
 import com.cc.yhzt.constant.Constant;
 import com.cc.yhzt.constant.RestBean;
+import com.cc.yhzt.entity.UserInfo;
 import com.cc.yhzt.service.IAccountDataService;
 import com.cc.yhzt.service.IPlayersService;
 import org.apache.shiro.SecurityUtils;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author :cc
@@ -56,6 +58,7 @@ public class LoginController extends BaseController {
         // 执行认证登陆
         try {
             token.setRememberMe(true);//记住我
+            addCookie(username, gamename, response, request);
             subject.login(token);
         } catch (UnknownAccountException uae) {
             return new RestBean(-1, "用户名或游戏名不正确~");
@@ -67,6 +70,8 @@ public class LoginController extends BaseController {
             return new RestBean(-1, "输入错误次数过多~");
         } catch (AuthenticationException ae) {
             return new RestBean(-1, "用户名或游戏名不正确~");
+        } catch (UnsupportedEncodingException e) {
+            return new RestBean(-1, "请启用浏览器cookie功能~");
         }
         if (subject.isAuthenticated()) {
             return new RestBean(1, "登录成功~");
@@ -99,5 +104,14 @@ public class LoginController extends BaseController {
     @RequestMapping("/unauthc")
     public String unauthc() {
         return "page/error/error-403";
+    }
+
+    @RequestMapping("/username")
+    @ResponseBody
+    @RequiresRoles(Constant.ALL_ACCOUNT)
+    public RestBean username() {
+        UserInfo userInfo = getUserByCookie();
+        String playerName = userInfo.getPlayerName();
+        return new RestBean(200, playerName);
     }
 }

@@ -1,28 +1,15 @@
 /** 登录页面样式 */
 
 body {
-    overflow:hidden
-}
-
-.my-parent{
-    width: 1200px;
-    display: block;
-}
-
-.my-footer{
-    width: 1200px;
-
-}
-
-.login-wrapper{
     background-image: url("../../assets/images/bg.jpeg");
-    background-color: #f0f2f5;
-    background-size: cover;
-    background-position: top center;
+    background-position: center 110px;
     background-repeat: no-repeat;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
+    background-size: 100%;
+    background-color: #f0f2f5;
+}
+
+.login-wrapper, body, html {
+    height: 100%
 }
 
 .login-wrapper {
@@ -39,9 +26,8 @@ body {
 }
 
 .login-body > .layui-card {
-    max-width: 280px;
-    margin: 10% auto;
-    opacity: 0.8;
+    max-width: 360px;
+    margin: 0 auto;
 }
 
 .login-body .layui-card-header {

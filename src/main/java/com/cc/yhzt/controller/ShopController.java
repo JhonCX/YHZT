@@ -6,9 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cc.yhzt.common.utils.StringUtil;
 import com.cc.yhzt.constant.Constant;
 import com.cc.yhzt.constant.RestBean;
-import com.cc.yhzt.constant.TreeResult;
 import com.cc.yhzt.constant.Status;
-import com.cc.yhzt.entity.AccountData;
+import com.cc.yhzt.constant.TreeResult;
 import com.cc.yhzt.entity.ShopList;
 import com.cc.yhzt.entity.TreeEntity;
 import com.cc.yhzt.entity.WalletEntity;
@@ -24,7 +23,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -58,41 +56,21 @@ public class ShopController extends BaseController{
     @ResponseBody
     public TreeResult menu(HttpServletRequest request,
                            HttpServletResponse response) {
-        List<ShopList> list = shopListService.list(new QueryWrapper<ShopList>(new ShopList().setFlag(1)).in("type", 1,2).orderByAsc("item_name"));
+        List<ShopList> list = shopListService.list(new QueryWrapper<ShopList>(new ShopList().setFlag(1)).in("type", 0, 1, 2).orderByAsc("item_name"));
         List<TreeEntity> data = new ArrayList<>();
-
-        TreeEntity top = new TreeEntity();
-        top.setId(1+"");
-        top.setTitle("全部");
-        List<TreeEntity> topChildren = new ArrayList<>();
-        for (ShopList s1 : list) {
-            if (s1.getType() == 1) {
-                TreeEntity one = new TreeEntity();
-                one.setId(s1.getId() + "");
-                one.setTitle(s1.getItemName());
-                List<TreeEntity> oneChildren = new ArrayList<>();
-                for (ShopList s2 : list) {
-                    if (s2.getParentId() .equals(s1.getId())) {
-                        TreeEntity two = new TreeEntity();
-                        two.setId(s2.getId() + "");
-                        two.setTitle(s2.getItemName());
-                        oneChildren.add(two);
-                    }
-                }
-                one.setChildren(oneChildren);
-                topChildren.add(one);
-            }
+        ShopList top = shopListService.getById(1);
+        getTreeTntity(data, top, null);
+        for (ShopList shop : list) {
+            getTreeTntity(data, shop, null);
         }
-        top.setChildren(topChildren);
-        data.add(top);
-
-        TreeResult result = new TreeResult();
+        TreeResult treeResult = new TreeResult();
         Status status = new Status();
-        status.setMessage("操作成功");
-        result.setStatus(status);
-        result.setData(data);
-        return result;
+        treeResult.setStatus(status);
+        treeResult.setData(data);
+        return treeResult;
     }
+
+
 
 
     @RequiresRoles(Constant.ALL_ACCOUNT)

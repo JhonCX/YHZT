@@ -21,10 +21,29 @@
             }
         }
 
-        /** dtree选中颜色重写 */
-        .dtree-theme-item-this {
-            background-color: #eeeeee !important;
+        /* 表单标题加虚线 */
+        .form-item-title {
+            text-align: center;
+            position: relative;
         }
+
+        .form-item-title:before {
+            content: "";
+            position: absolute;
+            border-top: 1px dashed #ccc;
+            left: 40px;
+            right: 40px;
+            top: 8px;
+            z-index: -1;
+        }
+
+        .form-item-title > span {
+            background-color: white;
+            padding: 0 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
     </style>
 </head>
 <body>
@@ -40,14 +59,16 @@
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <!-- 左树 -->
-        <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
+        <div class="layui-col-sm12 layui-col-md4 layui-col-lg2">
             <div class="layui-card">
-                <div class="layui-card-body mini-bar" id="treeTbTree">
+                <div style="height: auto;overflow: auto;" id="toolbarDiv">
+                    <div class="layui-card-body mini-bar" id="treeTbTree" data-id="0">
+                    </div>
                 </div>
             </div>
         </div>
         <!-- 右表 -->
-        <div class="layui-col-sm12 layui-col-md9 layui-col-lg10">
+        <div class="layui-col-sm12 layui-col-md8 layui-col-lg10">
             <div class="layui-card">
                 <div class="layui-card-body" style="min-height: 535px;">
 
@@ -64,11 +85,15 @@
                                 </button>
                             </div>
                             <div class="layui-inline demoTable pull-right">
-                                <button class="layui-btn icon-btn" data-type="batchBuy">
-                                    <i class="layui-icon">&#xe654;</i>批量购买
+                                <button class="layui-btn icon-btn" lay-filter="itemAdd" lay-submit>
+                                    <i class="layui-icon">&#xe654;</i>添加商品
                                 </button>
-                                <button class="layui-btn layui-btn-danger icon-btn" data-type="batchGift">
-                                    <i class="layui-icon">&#xe640;</i>批量赠送
+                                <button class="layui-btn layui-btn-normal icon-btn" lay-filter="itemBatchPrice" lay-submit>
+                                    <i class="layui-icon">&#xe654;</i>批量价格
+                                </button>
+                                <button class="layui-btn layui-btn-danger icon-btn" lay-filter="itemBatchAdd"
+                                        lay-submit>
+                                    <i class="layui-icon">&#xe654;</i>批量添加
                                 </button>
                             </div>
                         </div>
@@ -79,31 +104,127 @@
         </div>
     </div>
 </div>
-<div style="height: 550px;overflow: auto;" id="toolbarDiv">
-    <ul id="toolbarTree1" class="dtree" data-id="0"></ul>
-</div>
 
+
+<!-- 双排表单 -->
+<script type="text/html" id="modelSDKAuth">
+    <form id="modelFormSDKAuth" lay-filter="modelFormSDKAuth" class="layui-form layui-row model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item form-item-title"><span>必填项</span></div>
+                <div class="layui-form-item" id="one">
+                    <label class="layui-form-label">一级菜单</label>
+                    <div class="layui-input-block">
+                        <select name="oneMenu" id="oneMenu" lay-search="true" lay-verType="tips"
+                                lay-verify="required"
+                                required>
+                            <option value="">请选择一级菜单</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="two">
+                    <label class="layui-form-label">二级菜单</label>
+                    <div class="layui-input-block">
+                        <select name="twoMenu" id="twoMenu" lay-search="true" lay-verType="tips"
+                                lay-verify="required"
+                                required>
+                            <option value="">请选择二级菜单</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="itemId">
+                    <label class="layui-form-label">物品id</label>
+                    <div class="layui-input-block">
+                        <input name="itemId" placeholder="请输入物品id" type="number" class="layui-input"
+                               maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="itemName">
+                    <label class="layui-form-label">物品名称</label>
+                    <div class="layui-input-block">
+                        <input name="itemName" placeholder="请输入物品名称" type="text"
+                               class="layui-input"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="itemCount">
+                    <label class="layui-form-label">出售数量</label>
+                    <div class="layui-input-block">
+                        <input name="itemCount" placeholder="请输入出售数量" type="number"
+                               class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="itemPrice">
+                    <label class="layui-form-label">出售价格</label>
+                    <div class="layui-input-block">
+                        <input name="itemPrice" placeholder="请输入出售价格" type="number"
+                               class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item form-item-title"><span>选填</span></div>
+                <div class="layui-form-item" id="race">
+                    <label class="layui-form-label">种族</label>
+                    <div class="layui-input-block">
+                        <select name="race">
+                            <option value="">未知</option>
+                            <option value="0">通用</option>
+                            <option value="1">天族</option>
+                            <option value="-1">魔族</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="description">
+                    <label class="layui-form-label">物品描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="description" placeholder="请输入物品描述"
+                                  class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item text-center">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="modelSubmitSDKAuth" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
 <script type="text/html" id="modelUser">
     <form id="modelUserForm" lay-filter="modelUserForm" class="layui-form model-form">
         <input name="id" type="hidden"/>
         <div class="layui-form-item">
-            <label class="layui-form-label">赠送</label>
+            <label class="layui-form-label">一级菜单</label>
             <div class="layui-input-block">
-                <input name="giftName" placeholder="请输入要赠送的角色" type="text" class="layui-input" maxlength="20"
+                <input name="one" placeholder="请输入一级菜单" type="text" class="layui-input" maxlength="20" disabled
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">二级菜单</label>
+            <div class="layui-input-block">
+                <input name="two" placeholder="请输入二级菜单" type="text" class="layui-input" maxlength="20"
                        lay-verType="tips" lay-verify="required" required/>
             </div>
         </div>
         <div class="layui-form-item text-right">
             <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
-            <button class="layui-btn" lay-filter="modelSubmitUser" lay-submit>赠送</button>
+            <button class="layui-btn" lay-filter="modelSubmitUser" lay-submit>添加</button>
         </div>
     </form>
 </script>
 
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBarTbTree">
-    <a class="layui-btn layui-btn layui-btn-xs" lay-event="buy">购买</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="gift">赠送</a>
+    {{#if (d.type == 1) { }}
+    {{# }else if(d.type == 2){ }}
+    {{# }else if(d.type == 3){ }}
+    <a class="layui-btn layui-btn layui-btn-xs item-edit" lay-event="edit">修改</a>
+    {{# } }}
 </script>
 
 <script type="text/html" id="raceInfo">
@@ -137,7 +258,7 @@
 <script type="text/javascript" src="../../../static/assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="../../../static/assets/js/common.js?v=312"></script>
 <script>
-    layui.use(['layer', 'form', 'tableX', 'util', 'dtree', 'admin', 'index','table'], function () {
+    layui.use(['layer', 'form', 'tableX', 'util', 'dtree', 'admin', 'index', 'table', 'notice'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -146,6 +267,7 @@
         var dtree = layui.dtree;
         var admin = layui.admin;
         var index = layui.index;
+        var notice = layui.notice;
 
         // 渲染表格
         var insTb = table.render({
@@ -161,7 +283,6 @@
             },
             cols: [
                 [
-                    {type: 'checkbox'},
                     {field: 'id', align: 'center', sort: true, title: '序号'},
                     {field: 'itemId', align: 'center', sort: true, title: '物品id'},
                     {field: 'itemName', align: 'center', sort: true, title: '物品名称', minWidth: 200},
@@ -174,7 +295,7 @@
                         }, title: '创建时间'
                     },
                     {
-                        field: 'type', align: 'center', templet:'#itemType', title: '类型', sort: true
+                        field: 'type', align: 'center', templet: '#itemType', title: '类型', sort: true
                     },
                     {align: 'center', field: 'flag', sort: true, templet: '#tableStateUser', title: '状态'},
                     {align: 'center', toolbar: '#tableBarTbTree', title: '操作', minWidth: 120}
@@ -183,72 +304,133 @@
         });
 
         // 树形渲染
-        dtree.render({
-            elem: '#treeTbTree',
-            icon: '6',
-            url: '/menuManager',
-            type: 'all',
-            initLevel: '2',
-            dot: false,
-            method: 'GET',
-            ficon: "1",
-            toolbar:true,
-            toolbarScroll:"#toolbarDiv", // 绑定div元素
-            toolbarShow: '[add]',
-            line:true,
-            toolbarFun: {
-                addTreeNode: function(treeNode, $div){
-                    $.ajax({
-                        type: "post",
-                        data: treeNode,
-                        url: "/DTreeHelper/toolbar/insert",
-                        success: function(result){
-                            //DTree1.changeTreeNodeAdd(treeNode.nodeId); // 添加成功，返回ID
-                            //DTree1.changeTreeNodeAdd(true); // 添加成功
-                            //DTree1.changeTreeNodeAdd(result.data); // 添加成功，返回一个JSON对象
-                            //DTree1.changeTreeNodeAdd("refresh"); // 添加成功，局部刷新树
-                        },
-                        error: function(){
-                            //DTree1.changeTreeNodeAdd(false); // 添加失败
+        var treeTbTree = dtree.render({
+                elem: '#treeTbTree',
+                icon: '6',
+                url: '/menuManager',
+                type: 'all',
+                initLevel: '2',
+                // dot: false,
+                method: 'GET',
+                ficon: "1",
+                toolbar: true,
+                dataFormat: "list",  //配置data的风格为list
+                record: true,
+                toolbarScroll: "#toolbarDiv", // 绑定div元素
+                toolbarShow: ['add'], // 默认按钮制空
+                toolbarFun: {
+                    addTreeNode: function (treeNode, $div) {
+                        $.ajax({
+                            type: "post",
+                            url: "/insertMenu",
+                            data: treeNode,
+                            success: function (result) {
+                                treeTbTree.changeTreeNodeAdd("refresh");
+                                dtree.dataInit("treeTbTree", treeNode.parentId); // 选中深圳市
+                                insTb.reload({
+                                    where: {
+                                        nodeId: treeNode.nodeId.split("_")[0],
+                                        keyword: ''
+                                    }
+                                }, 'data');
+                            },
+                            error: function () {
+                                treeTbTree.changeTreeNodeAdd(false); // 添加失败
+                            }
+                        });
+                    },
+                    editTreeNode: function (treeNode, $div) { //编辑树节点后调用的函数，用于用户自定义，如未指定则树不会发生变化
+                        console.log(treeNode);
+                        treeTbTree.changeTreeNodeEdit(true); // 调用内置函数，修改节点后改变节点内容。传入false，则树不会发生变化
+                    },
+                    loadToolbarBefore: function (buttons, param, $div) {
+                        if (param.level === "3") { // 如果是叶子节点
+                            buttons.addToolbar = "";  // 取消新增功能
                         }
-                    });
+                        return buttons; // 将按钮对象返回
+                    }
                 },
-                editTreeNode: function(treeNode, $div){
-                    $.ajax({
-                        type: "post",
-                        data: treeNode,
-                        url: "/DTreeHelper/toolbar/update",
-                        success: function(result){
-                            //DTree1.changeTreeNodeEdit(true);// 修改成功
-                            //DTree1.changeTreeNodeEdit(result.param); // 修改成功，返回一个JSON对象
-                        },
-                        error: function(){
-                            //DTree1.changeTreeNodeEdit(false);//修改失败
+                toolbarExt: [
+                    {
+                        toolbarId: "testEdit", icon: "dtree-icon-bianji", title: "编辑菜单", handler: function (node, $div) {
+                            node.itemName = node.context;
+                            node.id = node.nodeId;
+                            if (node.level === "3") {
+                                var parent = dtree.getParentParam(treeTbTree, node.nodeId);
+                                node.twoMenu = parent.context;
+                                console.log(node);
+                            }
+                            layer.open({
+                                type: 1,
+                                title: '编辑节点',
+                                area: ['745px', '700px'],
+                                content: $('#modelSDKAuth').html(),
+                                success: function (layero, index) {
+                                    form.render();
+                                    form.val('modelFormSDKAuth', node);
+                                    $('#one').html('');
+                                    $('#itemId').html('');
+                                    $('#itemPrice').html('');
+                                    $('#itemCount').html('');
+                                    $('#race').html('');
+                                    $('#description').html('');
+                                    if (node.level === "3") {
+                                        var twoMenu = dtree.getChildParam(treeTbTree, 1);
+                                        var parent = dtree.getParentParam(treeTbTree, node.nodeId);
+                                        var option = "";
+                                        twoMenu.forEach(function (value, index) {
+                                            if (value.level === "2") {
+                                                if (value.nodeId === parent.nodeId) {
+                                                    option += "<option value='" + value.nodeId + "' selected='selected'>" + value.context + "</option>";
+                                                } else {
+                                                    option += "<option value='" + value.nodeId + "'>" + value.context + "</option>";
+                                                }
+                                            }
+                                        });
+                                        $('#twoMenu').html('');
+                                        $('#twoMenu').html(option);
+                                        form.render('select');
+                                    }
+                                    if (node.level === "2" || node.level === "1") {
+                                        $('#two').html('');
+                                    }
+                                    form.on('submit(modelSubmitSDKAuth)', function (data) {
+                                        layer.load(2);
+                                        admin.ajax({
+                                            url: "/itemEdit",
+                                            type: "post",
+                                            dataType: "json",
+                                            data: data.field,
+                                            success: function (result) {
+                                                if (result.code === 200) {
+                                                    insTb.reload();
+                                                    //DTree5.partialRefreshEdit($div, data.field.addNodeName); // 如果是字符串，则会更新文本内容
+                                                    treeTbTree.reload(); // 如果是json对象，则会更新节点的其他属性
+                                                    successNotice(result);
+                                                } else {
+                                                    warningNotice(result);
+                                                }
+                                                layer.close(index);
+                                                layer.closeAll('loading');
+                                            }
+                                        });
+                                        return false;
+                                    });
+                                }
+                            })
                         }
-                    });
-                },
-                delTreeNode: function(treeNode, $div){
-                    $.ajax({
-                        type: "post",
-                        data: treeNode,
-                        url: "/DTreeHelper/toolbar/delete",
-                        success: function(result){
-                            //DTree1.changeTreeNodeDel(true); // 删除成功
-                        },
-                        error: function(){
-                            //DTree1.changeTreeNodeDel(false);// 删除失败
-                        }
-                    });
-                }
+                    }
+                ]
             }
-        });
+        );
 
 
         // 树形点击事件
         dtree.on('node("treeTbTree")', function (obj) {
+            var $div = obj.dom;
+            treeTbTree.clickSpread($div);  //调用内置函数展开节点
             var data = obj.param;
             var level = data.level;
-            console.log(level);
             layer.msg('你选择了：' + data.context);
             $('#shop_search').val('');
             insTb.reload({
@@ -264,168 +446,119 @@
             insTb.reload({where: data.field}, 'data');
         });
 
-        //监听表格复选框选择
-        table.on('checkbox(tableTbTree)', function (obj) {
-            console.log(obj)
+        form.on('submit(itemAdd)', function (data) {
+            index.openTab({
+                title: '添加物品',
+                url: '/itemAdd',
+                end: function () {
+                    // table.reload('userTable');
+                }
+            });
         });
+
+        form.on('submit(itemBatchAdd)', function (data) {
+            index.openTab({
+                title: '批量添加物品',
+                url: '/itemBatchAdd',
+                end: function () {
+                    // table.reload('userTable');
+                }
+            });
+        });
+
+        form.on('submit(itemBatchPrice)', function (data) {
+            index.openTab({
+                title: '批量添加物品',
+                url: '/itemBatchPrice',
+                end: function () {
+                    // table.reload('userTable');
+                }
+            });
+        });
+
+
         //监听工具条
         table.on('tool(tableTbTree)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'buy') {
-                layer.confirm('是否购买 "' + data.itemName + '" ？', function (index) {
-                    admin.ajax({
-                        url: "/buy",
-                        type: 'post',
-                        data: {id: data.id},
-                        dataType: 'json',
-                        success: function (res) {
-                            if (res.code === 0) {
-                                var wallet = window.top.document.getElementById("wallet");
-                                wallet.innerHTML = "零用钱：" + res.data;
-                                layer.msg(res.msg, {icon: 1});
-                            } else {
-                                layer.msg(res.msg, {icon: 2});
-                            }
-                        }
-                    });
-                    layer.close(index);
-                });
-                // layer.msg('ID：'+ data.id + ' 的查看操作');
-            } else if (obj.event === 'gift') {
-                admin.open({
+            if (obj.event === 'edit') {
+                layer.open({
                     type: 1,
-                    title: '赠送',
-                    content: $('#modelUser').html(),
+                    title: '物品修改： ' + data.itemName,
+                    area: '745px',
+                    content: $('#modelSDKAuth').html(),
                     success: function (layero, dIndex) {
                         $(layero).children('.layui-layer-content').css('overflow', 'visible');
-                        var url = '/gift';
-                        // 回显数据
-                        form.val('modelUserForm', data);
-                        // 表单提交事件
-                        form.on('submit(modelSubmitUser)', function (data) {
+                        oneMenu(data);
+
+                        form.on('submit(modelSubmitSDKAuth)', function (data) {
                             layer.load(2);
-                            $.get(url, data.field, function (res) {
-                                layer.closeAll('loading');
-                                if (res.code === 0) {
-                                    // $('#wallet').html("零用钱：" + res.data);
-                                    var wallet = window.top.document.getElementById("wallet");
-                                    wallet.innerHTML = "零用钱：" + res.data;
+                            console.log(data.field);
+                            admin.ajax({
+                                url: "/itemEdit",
+                                type: "post",
+                                dataType: "json",
+                                data: data.field,
+                                success: function (result) {
+                                    if (result.code === 200) {
+                                        insTb.reload();
+                                        successNotice(result);
+                                    } else {
+                                        warningNotice(result);
+                                    }
                                     layer.close(dIndex);
-                                    layer.msg(res.msg, {icon: 1});
-                                } else {
-                                    layer.msg(res.msg, {icon: 2});
+                                    layer.closeAll('loading');
                                 }
-                            }, 'json');
+                            });
                             return false;
                         });
                     }
                 });
-            } else if (obj.event === 'edit') {
+            } else if (obj.event === 'add') {
                 layer.alert('编辑行：<br>' + JSON.stringify(data))
             }
         });
 
-        var $ = layui.$, active = {
-            batchBuy: function () { //获取选中数据
-                var checkStatus = table.checkStatus('idTest')
-                    , data = checkStatus.data;
-                if (data.length === 0) {
-                    layer.msg("请先选择商品~", {icon: 2});
-                    return false;
-                } else {
-                    var ids = "";
-                    var itemName = [];
-                    data.forEach(function (item) {
-                        ids += item.id + "_";
-                        itemName.push("  ⭐" + item.itemName + "⭐  </br>");
-                    });
-                    layer.confirm('是否购买 </br>"' + itemName + '"', function (index) {
-                        admin.ajax({
-                            url: "/batchBuy",
-                            type: 'post',
-                            data: {ids: ids},
-                            dataType: 'json',
-                            success: function (res) {
-                                if (res.code === 0) {
-                                    var wallet = window.top.document.getElementById("wallet");
-                                    wallet.innerHTML = "零用钱：" + res.data;
-                                    layer.msg(res.msg, {icon: 1});
-                                } else {
-                                    layer.msg(res.msg, {icon: 2});
-                                }
-                            }
-                        });
-                        layer.close(index);
-                    });
-                    // layer.alert(JSON.stringify(ids));
+        function oneMenu(data) {
+            admin.ajax({
+                url: "/oneMenu",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "id": data.id
+                },
+                success: function (result) {
+                    var option = result.data;
+                    $('#oneMenu').html('');
+                    $('#oneMenu').html(option);
+                    twoMenu(data.id, data.parentId);
+                    form.val('modelFormSDKAuth', data);
                 }
-            }
-            , batchGift: function () { //获取选中数据
-                var checkStatus = table.checkStatus('idTest')
-                    , data = checkStatus.data;
-                if (data.length === 0) {
-                    layer.msg("请先选择商品~", {icon: 2});
-                    return false;
-                } else {
-                    admin.open({
-                        type: 1,
-                        title: '批量赠送',
-                        content: $('#modelUser').html(),
-                        success: function (layero, dIndex) {
-                            $(layero).children('.layui-layer-content').css('overflow', 'visible');
-                            var url = '/batchGift';
-                            // 回显数据
-                            form.val('modelUserForm', data);
-                            // 表单提交事件
-                            form.on('submit(modelSubmitUser)', function (data2) {
-                                layer.load(2);
-                                var ids = "";
-                                var itemName = [];
-                                data.forEach(function (item) {
-                                    ids += item.id + "_";
-                                    itemName.push("  ⭐" + item.itemName + "⭐  </br>");
-                                });
-                                layer.confirm('是否赠送 </br>"' + itemName + '"', function (index) {
-                                    admin.ajax({
-                                        url: "/batchGift",
-                                        type: 'post',
-                                        data: {ids: ids, giftName: data2.field.giftName},
-                                        dataType: 'json',
-                                        success: function (res) {
-                                            if (res.code === 0) {
-                                                var wallet = window.top.document.getElementById("wallet");
-                                                wallet.innerHTML = "零用钱：" + res.data;
-                                                layer.msg(res.msg, {icon: 1});
-                                            } else {
-                                                layer.msg(res.msg, {icon: 2});
-                                            }
-                                        }
-                                    });
-                                    layer.close(index);
-                                });
-                                layer.closeAll('page');
-                                return false;
-                            });
-                        }
-                    });
-                    // layer.alert(JSON.stringify(ids));
-                }
-            }
-            , getCheckLength: function () { //获取选中数目
-                var checkStatus = table.checkStatus('idTest')
-                    , data = checkStatus.data;
-                layer.msg('选中了：' + data.length + ' 个');
-            }
-            , isAll: function () { //验证是否全选
-                var checkStatus = table.checkStatus('idTest');
-                layer.msg(checkStatus.isAll ? '全选' : '未全选')
-            }
-        };
+            });
+        }
 
-        $('.demoTable .layui-btn').on('click', function () {
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
+
+        form.on('select(oneMenu)', function (data) {
+            twoMenu(data.value, null);
         });
+
+        function twoMenu(id, parentId) {
+            admin.ajax({
+                url: "/twoMenu",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "id": id,
+                    "parentId": parentId
+                },
+                success: function (result) {
+                    var option = result.data;
+                    console.log(option);
+                    $('#twoMenu').html('');
+                    $('#twoMenu').html(option);
+                    form.render('select');
+                }
+            });
+        }
 
 
         // 修改物品状态
@@ -438,39 +571,9 @@
             }, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
-                    notice.success({
-                        title: '通知',
-                        position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
-                        transitionIn: 'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
-                        transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
-                        timeout: '1000', //显示时间
-                        progressBar: 'false',//进度条
-                        balloon: 'true',//气泡效果
-                        close: 'true',//关闭效果
-                        animateInside: 'true', //	文字动画效果
-                        theme: 'light',//主题 light、dark
-                        audio: '0',//音效	 1，2，3，4，5，6
-                        pauseOnHover: 'false',//鼠标滑过暂停消失时间
-                        resetOnHover: 'false',//鼠标滑过重置消失时间
-                        message: res.msg,
-                    });
+                    successNotice(res);
                 } else if (res.code == 1) {
-                    notice.warning({
-                        title: '通知',
-                        position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
-                        transitionIn: 'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
-                        transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
-                        timeout: '1000', //显示时间
-                        progressBar: 'false',//进度条
-                        balloon: 'true',//气泡效果
-                        close: 'true',//关闭效果
-                        animateInside: 'true', //	文字动画效果
-                        theme: 'light',//主题 light、dark
-                        audio: '0',//音效	 1，2，3，4，5，6
-                        pauseOnHover: 'false',//鼠标滑过暂停消失时间
-                        resetOnHover: 'false',//鼠标滑过重置消失时间
-                        message: res.msg,
-                    });
+                    warningNotice(res);
                 } else {
                     layer.msg(res.msg, {icon: 2});
                     $(obj.elem).prop('checked', !obj.elem.checked);
@@ -478,6 +581,45 @@
                 }
             }, 'json');
         });
+
+        function warningNotice(result) {
+            notice.warning({
+                title: '通知',
+                position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
+                transitionIn: 'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
+                transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
+                timeout: '1000', //显示时间
+                progressBar: 'false',//进度条
+                balloon: 'true',//气泡效果
+                close: 'true',//关闭效果
+                animateInside: 'true', //	文字动画效果
+                theme: 'light',//主题 light、dark
+                audio: '1',//音效	 1，2，3，4，5，6
+                pauseOnHover: 'false',//鼠标滑过暂停消失时间
+                resetOnHover: 'false',//鼠标滑过重置消失时间
+                message: result.msg
+            });
+        }
+
+        function successNotice(result) {
+            notice.success({
+                title: '通知',
+                position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
+                transitionIn: 'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
+                transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
+                timeout: '1000', //显示时间
+                progressBar: 'false',//进度条
+                balloon: 'true',//气泡效果
+                close: 'true',//关闭效果
+                animateInside: 'true', //	文字动画效果
+                theme: 'light',//主题 light、dark
+                audio: '1',//音效	 1，2，3，4，5，6
+                pauseOnHover: 'false',//鼠标滑过暂停消失时间
+                resetOnHover: 'false',//鼠标滑过重置消失时间
+                message: result.msg
+            });
+        }
+
     });
 </script>
 </body>

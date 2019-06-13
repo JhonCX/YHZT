@@ -13,38 +13,43 @@
         }
     </script>
 </head>
-<body>
-<div class="layui-container">
-    <div class="page-inner">
-        <div class="my-login">
-            <div class="layui-card layui-anim layui-anim-up">
-                <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp登录
-                </div>
-                <form class="layui-card-body layui-form layui-form-pane">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
-                        <div class="layui-input-block">
-                            <input name="username" type="text" placeholder="账号名" class="layui-input"
-                                   lay-verType="tips" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
-                        <div class="layui-input-block">
-                            <input name="gamename" type="text" placeholder="角色名" class="layui-input"
-                                   lay-verType="tips" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <button id="login-submit" lay-filter="login-submit" class="layui-btn layui-btn-fluid"
-                                lay-submit>登 录
-                        </button>
-                    </div>
-                </form>
+<style type="text/css">
+
+    body {
+    }
+
+</style>
+<body class="my-html">
+<div class="my-login">
+    <div class="layui-fluid">
+        <div class="layui-card layui-anim layui-anim-up">
+            <div class="layui-card-header">
+                <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp登录
             </div>
+            <form class="layui-card-body layui-form layui-form-pane">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
+                    <div class="layui-input-block">
+                        <input name="username" type="text" placeholder="账号名" class="layui-input"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
+                    <div class="layui-input-block">
+                        <input name="gamename" type="text" placeholder="角色名" class="layui-input"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button id="login-submit" lay-filter="login-submit" class="layui-btn layui-btn-fluid"
+                            lay-submit>登 录
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+
 </div>
 
 
@@ -72,16 +77,16 @@
                     notice.success({
                         title: '通知',
                         position: 'center', //位置 bottomRight、bottomLeft、topRight、 topLeft、 topCenter、 bottomCenter 、 center。
-                        transitionIn:'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
+                        transitionIn: 'fadeIn', //入场动画 bounceInLeft, bounceInRight, bounceInUp, bounceInDown, fadeIn, fadeInDown, fadeInUp, fadeInLeft, fadeInRight , flipInX。
                         transitionOut: 'fadeOut', //出场动画 fadeOut, fadeOutUp, fadeOutDown, fadeOutLeft, fadeOutRight, flipOutX。
                         timeout: '1000', //显示时间
                         progressBar: 'false',//进度条
                         balloon: 'true',//气泡效果
-                        close:'true',//关闭效果
+                        close: 'true',//关闭效果
                         animateInside: 'true', //	文字动画效果
-                        theme:'light',//主题 light、dark
-                        audio:'0',//音效	 1，2，3，4，5，6
-                        pauseOnHover:'false',//鼠标滑过暂停消失时间
+                        theme: 'light',//主题 light、dark
+                        audio: '0',//音效	 1，2，3，4，5，6
+                        pauseOnHover: 'false',//鼠标滑过暂停消失时间
                         resetOnHover: 'false',//鼠标滑过重置消失时间
                         message: res.msg,
                     });

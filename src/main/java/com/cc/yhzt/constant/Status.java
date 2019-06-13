@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class Status {
     final private Integer code = 200;
-    private String message;
+    final private String message = "success";
 }

@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: webshop
@@ -57,7 +56,7 @@ spring:
 # Logger Config
 logging:
   level:
-    com.cc.yhzt.mapper.*: debug
+    com.cc.yhzt.mapper.*: error
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/aion/*Mapper.xml

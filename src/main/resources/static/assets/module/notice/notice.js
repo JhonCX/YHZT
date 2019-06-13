@@ -67,7 +67,7 @@ layui.define([], function (exports) {
         displayMode: 0,  // 0无限制,1存在就不发出,2销毁之前
         position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
         target: '',  // 显示位置
-        targetFirst: false,  // 插入顺序
+        targetFirst: null,  // 插入顺序
         timeout: 5000,  // 关闭时间，false不自动关闭
         rtl: false,  // 内容居右
         animateInside: false,  // 进入动画效果
@@ -616,7 +616,11 @@ layui.define([], function (exports) {
                     $DOM.wrapper.classList.add(position);
                     document.body.appendChild($DOM.wrapper);
                 }
-                if (settings.position == 'topLeft' || settings.position == 'topCenter' || settings.position == 'topRight') {
+                var targetFirst = settings.targetFirst;
+                if ((targetFirst == undefined || targetFirst == null) && (settings.position == 'topLeft' || settings.position == 'topCenter' || settings.position == 'topRight')) {
+                    targetFirst = true;
+                }
+                if (targetFirst) {
                     $DOM.wrapper.insertBefore($DOM.toastCapsule, $DOM.wrapper.firstChild);
                 } else {
                     $DOM.wrapper.appendChild($DOM.toastCapsule);
@@ -1216,18 +1220,13 @@ layui.define([], function (exports) {
             embed = document.noticePlay;
             embed.volume = 100;
         } else {   // 非IE
-            var audio = document.getElementById('noticePlay');
-            if (!audio) {
-                audio = document.createElement('audio');
-                audio.setAttribute('id', 'noticePlay');
-                audio.setAttribute('hidden', true);
-                document.body.appendChild(audio);
-                audio = document.getElementById('noticePlay');
-            }
-            try {
-                audio.setAttribute('src', src);
-            } catch (e) {
-            }
+            var audio = document.createElement('audio');
+            audio.setAttribute('hidden', true);
+            audio.setAttribute('src', src);
+            document.body.appendChild(audio);
+            audio.addEventListener('ended', function () {
+                audio.parentNode.removeChild(audio);
+            }, false);
             audio.play();
         }
     };

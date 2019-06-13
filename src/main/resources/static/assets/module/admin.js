@@ -12,7 +12,7 @@ layui.define(["jquery", "layer"], function(f) {
 	var c = "theme-admin";
 	var m = {
 		version: "311",
-		defaultTheme: "theme-admin",
+		defaultTheme: "theme-white",
 		tableName: "easyweb",
 		flexible: function(n) {
 			if (window != top && !m.isTop()) {

@@ -11,7 +11,14 @@ import java.util.Map;
  */
 @Data
 public class TreeEntity {
-    private String id;
+    private Integer id;
     private String title;
-    private List<TreeEntity> children;
+    private Integer checkArr=0;
+    private Integer parentId;
+    private Integer itemId;
+    private Integer type;
+    private Integer flag;
+    private Integer checked;
+    private Boolean hide;
+    private Boolean disabled;
 }

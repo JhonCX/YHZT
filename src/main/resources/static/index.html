@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="./assets/images/favicon.ico" rel="icon">
-    <title>EasyWeb后台开发框架</title>
+    <title>新梦商城</title>
     <link rel="stylesheet" href="./assets/libs/layui/css/layui.css"/>
     <link rel="stylesheet" href="./assets/module/admin.css?v=312"/>
 </head>
@@ -57,7 +57,7 @@
             <li class="layui-nav-item" lay-unselect>
                 <a>
                     <img src="assets/images/head.png" class="layui-nav-img">
-                    <cite>管理员</cite>
+                    <cite id="username">管理员</cite>
                 </a>
                 <dl class="layui-nav-child">
                     <dd lay-unselect>
@@ -106,6 +106,10 @@
     <div class="layui-body"></div>
     <!-- 底部 -->
     <div class="layui-footer">
+            <audio style="width: 300px;height: 35px!important;" id="aud" src='music/太古之青苔森林.mp3' controls  loop="loop"  preload="auto">
+                浏览器不支持此格式
+            </audio>
+
         <span class="pull-right">仅个人娱乐学习使用</span>
     </div>
 </div>
@@ -140,6 +144,15 @@
             dataType: 'json',
             success: function(res){
                 $('#wallet').html("零用钱：" + res.msg);
+            }
+        });
+
+        admin.ajax({
+            url: "/username",
+            type: 'post',
+            dataType: 'json',
+            success: function(res){
+                $('#username').html(res.msg);
             }
         });
 

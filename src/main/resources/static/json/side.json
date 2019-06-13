@@ -11,6 +11,16 @@
       "name": "商品",
       "icon": "layui-icon layui-icon-cart-simple",
       "url": "/shop"
+    },
+    {
+      "name": "颜色选择器",
+      "icon": "layui-icon layui-icon-search\n",
+      "url": "/colorSelect"
+    },
+    {
+      "name": "永恒检索",
+      "icon": "layui-icon layui-icon-search\n",
+      "url": "/aionSearch"
     }
   ]
 }

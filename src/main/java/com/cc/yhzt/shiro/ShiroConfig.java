@@ -28,7 +28,7 @@ public class ShiroConfig {
     public SimpleCookie getSimpleCookie(){
         SimpleCookie simpleCookie = new SimpleCookie();
         simpleCookie.setName("rememberMe");
-        simpleCookie.setMaxAge(20000000);
+        simpleCookie.setMaxAge(180 * 24 * 60 * 60);
         return simpleCookie;
     }
 

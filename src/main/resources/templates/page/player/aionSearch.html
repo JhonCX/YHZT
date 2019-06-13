@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>重复商品</title>
+    <link rel="stylesheet" href="../../../static/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../../static/assets/module/admin.css?v=312"/>
+</head>
+<style type="text/css">
+</style>
+<body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid" style="height: 100%">
+    <div class="layui-card">
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-row">
+                    <div class="layui-col-md12">
+                        <blockquote class="layui-elem-quote layui-quote-nm">
+                            <div class="layui-form toolbar">
+                                <blockquote class="layui-elem-quote">npc查询</blockquote>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label w-auto">搜索：</label>
+                                        <div class="layui-input-inline mr0">
+                                            <select name="key">
+                                                <option value="1">id</option>
+                                                <option value="2">名称</option>
+                                                <option value="3">Str值</option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline mr0">
+                                            <input name="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn icon-btn" lay-filter="npcBtn" lay-submit>
+                                            <i class="layui-icon">&#xe615;</i>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="layui-table" id="npc" lay-filter="npc"></table>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md12">
+                        <blockquote class="layui-elem-quote layui-quote-nm">
+                            <div class="layui-form toolbar">
+                                <blockquote class="layui-elem-quote">技能查询</blockquote>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label w-auto">搜索：</label>
+                                        <div class="layui-input-inline mr0">
+                                            <select name="key">
+                                                <option value="1">id</option>
+                                                <option value="2">名称</option>
+                                                <option value="3">Str值</option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline mr0">
+                                            <input name="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn icon-btn" lay-filter="skillBtn" lay-submit>
+                                            <i class="layui-icon">&#xe615;</i>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="layui-table" id="skill" lay-filter="skill"></table>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-row">
+                    <div class="layui-col-md12">
+                        <blockquote class="layui-elem-quote layui-quote-nm">
+                            <div class="layui-form toolbar">
+                                <blockquote class="layui-elem-quote">任务查询</blockquote>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label w-auto">搜索：</label>
+                                        <div class="layui-input-inline mr0">
+                                            <select name="key">
+                                                <option value="1">id</option>
+                                                <option value="2">名称</option>
+                                                <option value="3">Str值</option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline mr0">
+                                            <input name="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn icon-btn" lay-filter="questBtn" lay-submit>
+                                            <i class="layui-icon">&#xe615;</i>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="layui-table" id="quest" lay-filter="quest"></table>
+                        </blockquote>
+
+
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md12">
+                        <blockquote class="layui-elem-quote layui-quote-nm">
+                            <div class="layui-form toolbar">
+                                <blockquote class="layui-elem-quote">套装查询</blockquote>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label w-auto">搜索：</label>
+                                        <div class="layui-input-inline mr0">
+                                            <select name="key">
+                                                <option value="1">id</option>
+                                                <option value="2">名称</option>
+                                                <option value="3">Str值</option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline mr0">
+                                            <input name="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn icon-btn" lay-filter="taozhuangBtn" lay-submit>
+                                            <i class="layui-icon">&#xe615;</i>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="layui-table" id="taozhuang" lay-filter="taozhuang"></table>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-row">
+                    <div class="layui-col-md6">
+                        <blockquote class="layui-elem-quote layui-quote-nm">
+                            <div class="layui-form toolbar">
+                                <blockquote class="layui-elem-quote">物品查询</blockquote>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label w-auto">搜索：</label>
+                                        <div class="layui-input-inline mr0">
+                                            <select name="key">
+                                                <option value="1">id</option>
+                                                <option value="2">名称</option>
+                                                <option value="3">Str值</option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline mr0">
+                                            <input name="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn icon-btn" lay-filter="itemBtn" lay-submit>
+                                            <i class="layui-icon">&#xe615;</i>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="layui-table" id="item" lay-filter="item"></table>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../../static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../../static/assets/js/common.js?v=312"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'tableX', 'util', 'admin', 'notice'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var util = layui.util;
+        var admin = layui.admin;
+        var table = layui.table;
+        var notice = layui.notice;
+
+        // 渲染表格
+        var taozhuang = table.render({
+            elem: '#taozhuang',
+            url: '/taozhuangSearch',
+            method: 'post',
+            page: {groups: 6},
+            cellMinWidth: 100,
+            limit: 5,
+            limits: [5, 15, 30, 50, 100],
+            title: '重复物品检索',
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'id', align: 'center', sort: false, title: 'id',hide:true},
+                    {field: 'itemId', align: 'center', sort: false, title: ''},
+                    {field: 'itemName', align: 'center', sort: false, title: '二级菜单'},
+                    {field: 'strName', align: 'center', sort: false, title: '序号', hide: true}
+                ]
+            ],
+            done: function () {
+            }
+        });
+
+        // 渲染表格
+        var item = table.render({
+            elem: '#item',
+            url: '/itemSearch',
+            method: 'post',
+            page: {groups: 6},
+            cellMinWidth: 100,
+            limit: 5,
+            limits: [5, 15, 30, 50, 100],
+            title: '重复物品检索',
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'id', align: 'center', sort: false, title: 'id',hide:true},
+                    {field: 'itemId', align: 'center', sort: false, title: ''},
+                    {field: 'itemName', align: 'center', sort: false, title: '二级菜单'},
+                    {field: 'strName', align: 'center', sort: false, title: '序号', hide: true}
+                ]
+            ],
+            done: function () {
+            }
+        });
+        // 渲染表格
+        var npc = table.render({
+            elem: '#npc',
+            url: '/npcSearch',
+            method: 'post',
+            page: {groups: 6},
+            cellMinWidth: 100,
+            limit: 5,
+            limits: [5, 15, 30, 50, 100],
+            title: '重复物品检索',
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'id', align: 'center', sort: false, title: 'id',hide:true},
+                    {field: 'itemId', align: 'center', sort: false, title: ''},
+                    {field: 'itemName', align: 'center', sort: false, title: '二级菜单'},
+                    {field: 'strName', align: 'center', sort: false, title: '序号', hide: true}
+                ]
+            ],
+            done: function () {
+            }
+        });
+        // 渲染表格
+        var skill = table.render({
+            elem: '#skill',
+            url: '/skillSearch',
+            method: 'post',
+            page: {groups: 6},
+            cellMinWidth: 100,
+            limit: 5,
+            limits: [5, 15, 30, 50, 100],
+            title: '重复物品检索',
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'id', align: 'center', sort: false, title: 'id',hide:true},
+                    {field: 'itemId', align: 'center', sort: false, title: ''},
+                    {field: 'itemName', align: 'center', sort: false, title: '二级菜单'},
+                    {field: 'strName', align: 'center', sort: false, title: '序号', hide: true}
+                ]
+            ],
+            done: function () {
+            }
+        });
+        // 渲染表格
+        var quest = table.render({
+            elem: '#quest',
+            url: '/questSearch',
+            method: 'post',
+            page: {groups: 6},
+            cellMinWidth: 100,
+            limit: 5,
+            limits: [5, 15, 30, 50, 100],
+            title: '重复物品检索',
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'id', align: 'center', sort: false, title: 'id',hide:true},
+                    {field: 'itemId', align: 'center', sort: false, title: ''},
+                    {field: 'itemName', align: 'center', sort: false, title: '二级菜单'},
+                    {field: 'strName', align: 'center', sort: false, title: '序号', hide: true}
+                ]
+            ],
+            done: function () {
+            }
+        });
+
+
+        // 搜索按钮点击事件
+        form.on('submit(taozhuangBtn)', function (data) {
+            taozhuang.reload({where: data.field}, 'data');
+        });
+        // 搜索按钮点击事件
+        form.on('submit(itemBtn)', function (data) {
+            item.reload({where: data.field}, 'data');
+        });
+        // 搜索按钮点击事件
+        form.on('submit(npcBtn)', function (data) {
+            npc.reload({where: data.field}, 'data');
+        });
+        // 搜索按钮点击事件
+        form.on('submit(skillBtn)', function (data) {
+            skill.reload({where: data.field}, 'data');
+        });
+        // 搜索按钮点击事件
+        form.on('submit(questBtn)', function (data) {
+            quest.reload({where: data.field}, 'data');
+        });
+
+        $('#item-search').click(function () {
+            $('#item-search-input').val('');
+            search.reload({where: ''});
+        });
+
+    });
+</script>
+
+</body>
+</html>

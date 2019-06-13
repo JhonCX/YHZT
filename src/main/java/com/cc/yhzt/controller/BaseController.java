@@ -11,6 +11,7 @@ import com.cc.yhzt.service.IPlayersService;
 import com.cc.yhzt.service.ISurveysService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 
 import javax.annotation.Resource;
@@ -40,7 +41,7 @@ public class BaseController {
     @Resource
     private IPlayersService playersService;
 
-    public UserInfo getUserByCookie(HttpServletRequest request) {
+    public UserInfo getUserByCookie() {
         Cookie[] cookies = request.getCookies();
         String token = "";
         for (Cookie cookie : cookies) {
@@ -63,6 +64,11 @@ public class BaseController {
         }
     }
 
+    public Players getPlayer(){
+        UserInfo userInfo = getUserByCookie();
+        return  playersService.getOne(new QueryWrapper<>(new Players().setName(userInfo.getPlayerName())));
+    }
+
 
     public void addCookie(String username, String gamename, HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
         if (StringUtils.isNotBlank(username) && StringUtils.isNoneBlank(gamename)) {
@@ -71,39 +77,10 @@ public class BaseController {
             //设置cookie路径
             userCookie.setPath(request.getContextPath() + "/");
             //设置cookie保存的时间 单位：秒
-            userCookie.setMaxAge(2 * 24 * 60 * 60);
+            userCookie.setMaxAge(180 * 24 * 60 * 60 );
             //将cookie添加到响应
             response.addCookie(userCookie);
         }
-    }
-
-    public void addPlayer2Session(HttpServletRequest request, Players player, String loginType) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setAccountId(player.getAccountId());
-        userInfo.setPlayerName(player.getName());
-        userInfo.setAccountName(player.getAccountName());
-        userInfo.setPlayerId(player.getId());
-        userInfo.setLoginType(loginType);
-        request.getSession().setAttribute(Constant.USER_SESSION_KEY, userInfo);
-    }
-
-    public void addAdmin2Session(HttpServletRequest request, String username, String pwd, String loginType) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setPlayerName(pwd);
-        userInfo.setAccountName(username);
-        userInfo.setLoginType(loginType);
-        request.getSession().setAttribute(Constant.USER_SESSION_KEY, userInfo);
-    }
-
-    public void removeUserFromSession(HttpServletRequest request) {
-        UserInfo userInfo = null == request.getSession().getAttribute(Constant.USER_SESSION_KEY) ? null : (UserInfo) request.getSession().getAttribute(Constant.USER_SESSION_KEY);
-        if (null != userInfo) {
-            request.getSession().removeAttribute(Constant.USER_SESSION_KEY);
-        }
-    }
-
-    public UserInfo getUserFromSession(HttpServletRequest request) {
-        return (UserInfo) request.getSession().getAttribute(Constant.USER_SESSION_KEY);
     }
 
 
@@ -115,8 +92,8 @@ public class BaseController {
 
     public WalletEntity getWallet() {
         WalletEntity walletEntity = new WalletEntity();
-        Subject subject = SecurityUtils.getSubject();
-        Players players = (Players) subject.getPrincipal();
+        UserInfo userInfo = getUserByCookie();
+        Players players = playersService.getOne(new QueryWrapper<>(new Players().setName(userInfo.getPlayerName())));
         Integer id = players.getId();
         List<Inventory> moneys = inventoryService.list(new QueryWrapper<>(new Inventory().setItemOwner(id).setItemId(systemParams.getId())));
         Long count = 0L;
@@ -133,38 +110,56 @@ public class BaseController {
     /**
      * 是否出售 1为出售 2为余额不足 0为错误
      */
-    public Sale isSale(Long shopPrice, List<ShopList> shopList, Boolean isGift ,Players giftPlayer) {
+    public Sale isSale(Long shopPrice, List<ShopList> shopList, Boolean isGift, Players giftPlayer) {
         WalletEntity wallet = getWallet();
         Sale sale = new Sale();
         sale.setCost(0L);
         sale.setFlag(2);
         sale.setWallet(wallet.getAllMoney());
-        if (wallet.getAllMoney() >= shopPrice) {
-            if (costMoney(wallet.getUser().getId(), wallet.getMoneys(), shopPrice)) {
-                sale.setFlag(1);
-                sale.setCost(shopPrice);
-                sale.setWallet(wallet.getAllMoney()-shopPrice);
-                if (!isGift) {
-                    boolean b = giveSurvey(wallet.getUser(), shopList);
-                    if (!b) {
-                        sale.setFlag(0);
-                    }
-                } else {
-                    boolean b = giveSurvey(giftPlayer, shopList);
-                    if (!b) {
-                        sale.setFlag(0);
-                    }
+        Subject subject = SecurityUtils.getSubject();
+        boolean gm = subject.hasRole(Constant.ADMIN_ACCOUNT);
+        if (gm) {
+            sale.setFlag(1);
+            sale.setCost(shopPrice);
+            if (!isGift) {
+                boolean b = giveSurvey(wallet.getUser(), shopList);
+                if (!b) {
+                    sale.setFlag(0);
                 }
-
+            } else {
+                boolean b = giveSurvey(giftPlayer, shopList);
+                if (!b) {
+                    sale.setFlag(0);
+                }
             }
-        } else {
-            sale.setCost(0L);
-            sale.setFlag(2);
+        }else {
+            if (wallet.getAllMoney() >= shopPrice) {
+                if (costMoney(wallet.getUser().getId(), wallet.getMoneys(), shopPrice)) {
+                    sale.setFlag(1);
+                    sale.setCost(shopPrice);
+                    sale.setWallet(wallet.getAllMoney() - shopPrice);
+                    if (!isGift) {
+                        boolean b = giveSurvey(wallet.getUser(), shopList);
+                        if (!b) {
+                            sale.setFlag(0);
+                        }
+                    } else {
+                        boolean b = giveSurvey(giftPlayer, shopList);
+                        if (!b) {
+                            sale.setFlag(0);
+                        }
+                    }
+
+                }
+            } else {
+                sale.setCost(0L);
+                sale.setFlag(2);
+            }
         }
         return sale;
     }
 
-    public Boolean costMoney(Integer itemOwner,List<Inventory> moneys,Long cost) {
+    public Boolean costMoney(Integer itemOwner, List<Inventory> moneys, Long cost) {
         for (Inventory money : moneys) {
             if (cost < money.getItemCount()) {
                 money.setItemCount(money.getItemCount() - cost);
@@ -183,7 +178,7 @@ public class BaseController {
         List<Surveys> surveysList = new ArrayList<>();
         for (ShopList shop : shopList) {
             Surveys survey = new Surveys();
-            survey.setHtmlRadio("我是唱跳时长两年半的 '"+user.getName()+"' ~!");
+            survey.setHtmlRadio("我是唱跳时长两年半的 '" + user.getName() + "' ~!");
             survey.setHtmlText("听说打篮球缺人?");
             survey.setItemId(shop.getItemId());
             survey.setOwnerId(user.getId());
@@ -196,8 +191,8 @@ public class BaseController {
     }
 
 
-    public RestBean shopResult(Long shopPrice,List<ShopList> shopList,Boolean isGift,Players giftPlayer) {
-        Sale sale = isSale(shopPrice,shopList,isGift,giftPlayer);
+    public RestBean shopResult(Long shopPrice, List<ShopList> shopList, Boolean isGift, Players giftPlayer) {
+        Sale sale = isSale(shopPrice, shopList, isGift, giftPlayer);
         if (1 == sale.getFlag()) {
             if (isGift) {
                 return new RestBean(0, "赠送成功！", sale.getWallet() + "");
@@ -208,6 +203,27 @@ public class BaseController {
             return new RestBean(-1, "失败，余额不足！");
         } else {
             return new RestBean(-1, "失败，未知错误！");
+        }
+    }
+
+    public void getTreeTntity(List<TreeEntity> data, ShopList top, Integer id) {
+        TreeEntity topTree = new TreeEntity();
+        topTree.setId(top.getId());
+        topTree.setTitle(top.getItemName());
+        topTree.setCheckArr(0);
+        topTree.setItemId(top.getItemId());
+        topTree.setFlag(top.getFlag());
+        topTree.setParentId(top.getParentId());
+        topTree.setType(top.getType());
+        if (null != id) {
+            if (top.getId().equals(id)) {
+                topTree.setChecked(1);
+            }
+            if (top.getId() != 1) {
+                data.add(topTree);
+            }
+        } else {
+            data.add(topTree);
         }
     }
 }

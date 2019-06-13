@@ -1,4 +1,4 @@
-/** EasyWeb iframe v3.1.2 date:2019-06-05 License By http://easyweb.vip */
+﻿/** EasyWeb iframe v3.1.2 date:2019-06-05 License By http://easyweb.vip */
 
 html {
     background-color: #f2f2f2;
@@ -888,10 +888,7 @@ html {
 }
 
 .layui-layer-admin {
-    max-width: 98%;
-    max-width: calc(100% - 30px);
-    max-width: -moz-calc(100% - 30px);
-    max-width: -webkit-calc(100% - 30px);
+    max-width: 100%;
 }
 
 .layui-layer-iframe .layui-layer-content {
