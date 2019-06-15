@@ -44,11 +44,12 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String username = (String) principals.getPrimaryPrincipal();
+        String gamename = (String) principals.getPrimaryPrincipal();
         // 从数据库或者缓存中获得角色数据
         Set<String> roles = new HashSet<>();
         Set<String> permissions = new HashSet<>();
-        AccountData account = accountDataService.getOne(new QueryWrapper<>(new AccountData().setName(username)));
+        Players one = playersService.getOne(new QueryWrapper<>(new Players().setName(gamename)));
+        AccountData account = accountDataService.getOne(new QueryWrapper<>(new AccountData().setName(one.getAccountName())));
         if (account.getAccessLevel() >= 5) {
             roles.add(Constant.ADMIN_ACCOUNT);
         } else {
@@ -71,8 +72,8 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         // 1.从主体传过来的认证信息中，获得用户名
-        String username = (String) token.getPrincipal();
-        String gamename = new String((char[])token.getCredentials()).toLowerCase();
+        String gamename = (String) token.getPrincipal();
+        String username = new String((char[])token.getCredentials()).toLowerCase();
         // 2.通过用户名到数据库中获取凭证
         Players player = playersService.getOne(new QueryWrapper<>(new Players().setAccountName(username).setName(gamename)));
         AccountData accountData = accountDataService.getById(player.getAccountId());
@@ -86,7 +87,7 @@ public class CustomRealm extends AuthorizingRealm {
         if(password == null) {
             return null;
         }
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username, password, ClassName);
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(password, username, ClassName);
         return simpleAuthenticationInfo;
     }
 }

@@ -41,47 +41,13 @@ public class BaseController {
     @Resource
     private IPlayersService playersService;
 
-    public UserInfo getUserByCookie() {
-        Cookie[] cookies = request.getCookies();
-        String token = "";
-        for (Cookie cookie : cookies) {
-            if (Constant.PLAYER_COOKIE_KEY.equals(cookie.getName())) {
-                token = cookie.getValue();
-            }
-        }
-        if (StringUtils.isNotBlank(token)) {
-            String[] s = token.split("_");
-            if (s.length == BigDecimal.ROUND_CEILING) {
-                UserInfo userInfo = new UserInfo();
-                userInfo.setAccountName(s[0]);
-                userInfo.setPlayerName(s[1]);
-                return userInfo;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
 
     public Players getPlayer(){
-        UserInfo userInfo = getUserByCookie();
-        return  playersService.getOne(new QueryWrapper<>(new Players().setName(userInfo.getPlayerName())));
+        Subject subject = SecurityUtils.getSubject();
+        String gamename  = (String) subject.getPrincipal();
+        return  playersService.getOne(new QueryWrapper<>(new Players().setName(gamename)));
     }
 
-
-    public void addCookie(String username, String gamename, HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
-        if (StringUtils.isNotBlank(username) && StringUtils.isNoneBlank(gamename)) {
-            //创建cookie
-            Cookie userCookie = new Cookie(Constant.PLAYER_COOKIE_KEY, username + "_" + gamename);
-            //设置cookie路径
-            userCookie.setPath(request.getContextPath() + "/");
-            //设置cookie保存的时间 单位：秒
-            userCookie.setMaxAge(180 * 24 * 60 * 60 );
-            //将cookie添加到响应
-            response.addCookie(userCookie);
-        }
-    }
 
 
     public Page getPage() {
@@ -92,8 +58,7 @@ public class BaseController {
 
     public WalletEntity getWallet() {
         WalletEntity walletEntity = new WalletEntity();
-        UserInfo userInfo = getUserByCookie();
-        Players players = playersService.getOne(new QueryWrapper<>(new Players().setName(userInfo.getPlayerName())));
+        Players players = getPlayer();
         Integer id = players.getId();
         List<Inventory> moneys = inventoryService.list(new QueryWrapper<>(new Inventory().setItemOwner(id).setItemId(systemParams.getId())));
         Long count = 0L;
@@ -160,6 +125,9 @@ public class BaseController {
     }
 
     public Boolean costMoney(Integer itemOwner, List<Inventory> moneys, Long cost) {
+        if (0 == cost) {
+            return true;
+        }
         for (Inventory money : moneys) {
             if (cost < money.getItemCount()) {
                 money.setItemCount(money.getItemCount() - cost);

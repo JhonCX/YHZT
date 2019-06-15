@@ -1,6 +1,5 @@
 package com.cc.yhzt;
 
-import com.cc.yhzt.entity.ShopListItem;
 import com.cc.yhzt.service.IShopListItemService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,17 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
