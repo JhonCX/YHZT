@@ -23,7 +23,7 @@ color 2E
 echo. 
 java -jar yhzt-1.0.jar  --server.port=233 
 ```
-&emsp;&emsp;其中 `--server.port=233`中  **233** 可以修改为自定义的端口
+&emsp;&emsp;其中 `--server.port=233`中  **233** 可以修改为自定义的端口, `新梦商城`可以修改为任意名称。
 
 ## 使用说明
 
