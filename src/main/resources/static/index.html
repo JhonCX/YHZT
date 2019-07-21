@@ -106,9 +106,10 @@
     <div class="layui-body"></div>
     <!-- 底部 -->
     <div class="layui-footer">
-            <audio style="width: 300px;height: 35px!important;" id="aud" src='music/太古之青苔森林.mp3' controls  loop="loop"  preload="auto">
-                浏览器不支持此格式
-            </audio>
+        <span class="pull-left">注：凡可用本系统的配套的aion模拟器，皆为免费模拟器，请不要上当。</span>
+        <audio style="width: 300px;height: 35px!important;" id="aud" src='music/太古之青苔森林.mp3' loop="loop" autoplay>
+            浏览器不支持此格式
+        </audio>
 
         <span class="pull-right">仅个人娱乐学习使用</span>
     </div>
@@ -142,7 +143,7 @@
             url: "/myWallet",
             type: 'post',
             dataType: 'json',
-            success: function(res){
+            success: function (res) {
                 $('#wallet').html("零用钱：" + res.msg);
             }
         });
@@ -151,7 +152,7 @@
             url: "/username",
             type: 'post',
             dataType: 'json',
-            success: function(res){
+            success: function (res) {
                 $('#username').html(res.msg);
             }
         });
@@ -160,10 +161,10 @@
             managementEntrance: function () {
                 admin.ajax({
                     url: "/getUserType",
-                    data: {gm:1},
+                    data: {gm: 1},
                     type: 'post',
                     dataType: 'json',
-                    success: function(res){
+                    success: function (res) {
                         // alert(res.code + '-' + res.msg);
                         if (res.code === 1) {
                             $.get('json/side2.json', function (res) {
@@ -177,7 +178,7 @@
                             index.openTab({
                                 title: '禁止访问',
                                 url: '/unauthcAdmin',
-                                end: function() {
+                                end: function () {
                                     // table.reload('userTable');
                                 }
                             });
