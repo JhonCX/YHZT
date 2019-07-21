@@ -33,9 +33,7 @@ java -jar yhzt-1.0.jar  --server.port=233
 	修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
 	```
                 gameserver.security.survey.delay.minute = 20
-                ```<br/>
-	为<br/>
-    ```
+	为
             	gameserver.security.survey.delay.minute = 1
                 ```<br/>
 	这样购买的物品领取间隔为1分钟<br/>
