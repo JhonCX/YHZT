@@ -32,11 +32,11 @@ java -jar yhzt-1.0.jar  --server.port=233
 &emsp;&emsp;3. 商城默认领取间隔为20分钟 <br/>
 &emsp;&emsp;	修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
 &emsp;&emsp;	```
-&emsp;&emsp;      gameserver.security.survey.delay.minute = 20
+                gameserver.security.survey.delay.minute = 20
 &emsp;&emsp;     ```<br/>
 &emsp;&emsp;	为<br/>
 &emsp;&emsp;        ```
-&emsp;&emsp;	gameserver.security.survey.delay.minute = 1
+            	gameserver.security.survey.delay.minute = 1
 &emsp;&emsp;        ```<br/>
 &emsp;&emsp;	这样购买的物品领取间隔为1分钟<br/>
 &emsp;&emsp;4.启动商城后 浏览器访问 localhost:233 即可打开商城登录页面<br/>
@@ -46,7 +46,7 @@ java -jar yhzt-1.0.jar  --server.port=233
 ## 参与贡献
 
 &emsp;&emsp;1. Fork 本仓库<br/>
-&emsp;&emsp;2. 新建 Feat_xxx 分支<br/>
+&emsp;&emsp;2. 新建 yhzt_xxx 分支<br/>
 &emsp;&emsp;3. 提交代码<br/>
 &emsp;&emsp;4. 新建 Pull Request<br/>
 
