@@ -1,12 +1,12 @@
 # yhzt
 
 ## 介绍
-**YHZT**</br>
+**YHZT**<br/>
 &emsp;&emsp;这是一款针对AION EMU genermany（国内为风大AL AION）编写的免费开源的中文购买商城。
 
 ## 使用
 JDK1.8 <br/>
-spring boot  </br>
+spring boot  <br/>
 EasyWeb UI
 
 ## 安装教程
