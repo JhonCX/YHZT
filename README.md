@@ -30,16 +30,15 @@ java -jar yhzt-1.0.jar  --server.port=233
 &emsp;&emsp;1. 进入管理入口 需要GM等级大于等于5<br/>
 &emsp;&emsp;2. 商城购买物品通过调查问卷领取 延时在一分钟<br/>
 &emsp;&emsp;3. 商城默认领取间隔为20分钟 <br/>
-	修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
-	修改<br/>
-	```
-        gameserver.security.survey.delay.minute = 20
-        ```<br/>
-	为<br/>
-        ```
-	gameserver.security.survey.delay.minute = 1
-        ```<br/>
-	这样购买的物品领取间隔为1分钟<br/>
+&emsp;&emsp;	修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
+&emsp;&emsp;	```
+&emsp;&emsp;      gameserver.security.survey.delay.minute = 20
+&emsp;&emsp;     ```<br/>
+&emsp;&emsp;	为<br/>
+&emsp;&emsp;        ```
+&emsp;&emsp;	gameserver.security.survey.delay.minute = 1
+&emsp;&emsp;        ```<br/>
+&emsp;&emsp;	这样购买的物品领取间隔为1分钟<br/>
 &emsp;&emsp;4.启动商城后 浏览器访问 localhost:233 即可打开商城登录页面<br/>
 &emsp;&emsp;5.商城币为游戏内的 **金功勋勋章** **id：186000030**  因为有延迟，所以获取金功勋章后需要小退才能同步到商城<br/>
 &emsp;&emsp;6.商城币严格按照数据库数值计算，游戏内的**金功勋勋章数量**仅供参考<br/>
