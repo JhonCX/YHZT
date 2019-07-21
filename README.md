@@ -33,11 +33,11 @@ java -jar yhzt-1.0.jar  --server.port=233
 &emsp;&emsp;	修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
 &emsp;&emsp;	```
                 gameserver.security.survey.delay.minute = 20
-&emsp;&emsp;     ```<br/>
+                ```<br/>
 &emsp;&emsp;	为<br/>
-&emsp;&emsp;        ```
+&emsp;&emsp;    ```
             	gameserver.security.survey.delay.minute = 1
-&emsp;&emsp;        ```<br/>
+                ```<br/>
 &emsp;&emsp;	这样购买的物品领取间隔为1分钟<br/>
 &emsp;&emsp;4.启动商城后 浏览器访问 localhost:233 即可打开商城登录页面<br/>
 &emsp;&emsp;5.商城币为游戏内的 **金功勋勋章** **id：186000030**  因为有延迟，所以获取金功勋章后需要小退才能同步到商城<br/>
