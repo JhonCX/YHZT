@@ -39,7 +39,7 @@ java -jar yhzt-1.0.jar  --server.port=233
         ```
 	gameserver.security.survey.delay.minute = 1
         ```
-	这样购买的物品领取间隔为1分钟
+	这样购买的物品领取间隔为1分钟<br/>
 &emsp;&emsp;4.启动商城后 浏览器访问 localhost:233 即可打开商城登录页面<br/>
 &emsp;&emsp;5.商城币为游戏内的 **金功勋勋章** **id：186000030**  因为有延迟，所以获取金功勋章后需要小退才能同步到商城<br/>
 &emsp;&emsp;6.商城币严格按照数据库数值计算，游戏内的**金功勋勋章数量**仅供参考<br/>
@@ -73,3 +73,4 @@ java -jar yhzt-1.0.jar  --server.port=233
 ![商城检索](https://images.gitee.com/uploads/images/2019/0721/221004_85c2a97e_2252189.png "商城搜索.png")
 **用户管理**
 ![用户管理](https://images.gitee.com/uploads/images/2019/0721/221023_17f1a37a_2252189.png "用户管理.png")
+
