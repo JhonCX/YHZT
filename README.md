@@ -1,15 +1,15 @@
 # yhzt
 
-#### 介绍
+## 介绍
 **YHZT**</br>
 &emsp;&emsp;这是一款针对AION EMU genermany（国内为风大AL AION）编写的免费开源的中文购买商城。
 
-#### 使用技术
+## 使用技术
 JDK1.8
 spring boot  
 EasyWeb UI
 
-#### 安装教程
+## 安装教程
 
 1.使用navicat导入shop_list.sql 和 shop_list_item 表到gs数据库下
 
@@ -25,7 +25,7 @@ java -jar yhzt-1.0.jar  --server.port=233
 ```
 其中 `--server.port=233`中  **233** 可以修改为自定义的端口
 
-#### 使用说明
+## 使用说明
 
 1. 进入管理入口 需要GM等级大于等于5
 2. 商城购买物品通过调查问卷领取 延时在一分钟
@@ -40,25 +40,32 @@ java -jar yhzt-1.0.jar  --server.port=233
 5.商城币为游戏内的 **金功勋勋章** **id：186000030**  因为有延迟，所以获取金功勋章后需要小退才能同步到商城
 6.商城币严格按照数据库数值计算，游戏内的**金功勋勋章数量**仅供参考
 
-#### 参与贡献
+## 参与贡献
 
 1. Fork 本仓库
 2. 新建 Feat_xxx 分支
 3. 提交代码
 4. 新建 Pull Request
 
-#### 图片展示
-**用户功能**
+## 图片展示
+###用户功能###
 **主题更换**
 ![主题更换](https://images.gitee.com/uploads/images/2019/0721/220417_8d140c02_2252189.png "主题更换页")
 **物品购买**
 ![物品购买](https://images.gitee.com/uploads/images/2019/0721/220527_a0a7d0ab_2252189.png "商品购买页.png")
+**颜色选择**
 ![颜色选择](https://images.gitee.com/uploads/images/2019/0721/220612_3a26617e_2252189.png "颜色选择页")
+**网页全屏**
 ![网页全屏](https://images.gitee.com/uploads/images/2019/0721/220716_8f5edfc2_2252189.png "全屏网页.png")
+**物品检索**
 ![物品检索](https://images.gitee.com/uploads/images/2019/0721/220759_328d303b_2252189.png "永恒检索（技能 npc 套装 任务 物品）.png")
+**便签功能**
 ![便签功能](https://images.gitee.com/uploads/images/2019/0721/220826_26bf77a9_2252189.png "便签（清除浏览器缓存后 保存的内容清空）.png")![购买历史](https://images.gitee.com/uploads/images/2019/0721/220851_59889069_2252189.png "获取物品历史.png")
 
-**管理功能**
+###管理功能###
+**物品管理**
 ![物品管理](https://images.gitee.com/uploads/images/2019/0721/220943_51f4855c_2252189.png "商城出售物品管理.png")
+**商城检索**
 ![商城检索](https://images.gitee.com/uploads/images/2019/0721/221004_85c2a97e_2252189.png "商城搜索.png")
+**用户管理**
 ![用户管理](https://images.gitee.com/uploads/images/2019/0721/221023_17f1a37a_2252189.png "用户管理.png")
