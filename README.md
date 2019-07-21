@@ -1,17 +1,19 @@
 # yhzt
 
 #### 介绍
-**YHZT**
-&emsp;&emsp;这是一款正对AION EMU genermany免费开源的中文购买商城。
+**YHZT**</br>
+&emsp;&emsp;这是一款针对AION EMU genermany（国内为风大AL AION）编写的免费开源的中文购买商城。
 
-#### 软件架构
+#### 使用技术
 JDK1.8
 spring boot  
 EasyWeb UI
 
 #### 安装教程
 
-拉取到本地 打成Jar包后，新建记事本，命名为: XXX.bat 并添加以下内容
+1.使用navicat导入shop_list.sql 和 shop_list_item 表到gs数据库下
+
+2.代码拉取到本地后，打成Jar包后，新建记事本，命名为: XXX.bat 并添加以下内容
 ```
 @echo off
 echo.
@@ -19,14 +21,21 @@ SET PATH="JRE1.8\bin"
 title 新梦商城
 color 2E
 echo. 
-java -jar yhzt-1.0.jar  --server.port=233 --item.id=186000030
+java -jar yhzt-1.0.jar  --server.port=233 
 ```
+其中 `--server.port=233`中 ###233### 可以修改为自定义的端口
 
 #### 使用说明
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. 进入管理入口 需要GM等级大于等于5
+2. 商城购买物品通过调查问卷领取 延时在一分钟
+3. 商城默认领取间隔为20分钟 
+	修改 ###AL-Game\config\main###下的 ###security.properties### 文件 
+	修改
+	gameserver.security.survey.delay.minute = 20
+	为
+	gameserver.security.survey.delay.minute = 1
+	这样购买的物品领取间隔为1分钟
 
 #### 参与贡献
 
