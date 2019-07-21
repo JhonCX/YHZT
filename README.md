@@ -1,19 +1,26 @@
 # yhzt
 
 #### 介绍
-{**以下是码云平台说明，您可以替换此简介**
-码云是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用码云实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+**YHZT**
+&emsp;&emsp;这是一款正对AION EMU genermany免费开源的中文购买商城。
 
 #### 软件架构
-软件架构说明
-
+JDK1.8
+spring boot  
+EasyWeb UI
 
 #### 安装教程
 
-1. xxxx
-2. xxxx
-3. xxxx
+拉取到本地 打成Jar包后，新建记事本，命名为: XXX.bat 并添加以下内容
+```
+@echo off
+echo.
+SET PATH="JRE1.8\bin"
+title 新梦商城
+color 2E
+echo. 
+java -jar yhzt-1.0.jar  --server.port=233 --item.id=186000030
+```
 
 #### 使用说明
 
