@@ -51,7 +51,7 @@ java -jar yhzt-1.0.jar  --server.port=233
 &emsp;&emsp;4. 新建 Pull Request<br/>
 
 ## 图片展示
-####用户功能
+####用户功能<br/>
 **主题更换**
 ![主题更换](https://images.gitee.com/uploads/images/2019/0721/220417_8d140c02_2252189.png "主题更换页")
 **物品购买**
@@ -63,9 +63,9 @@ java -jar yhzt-1.0.jar  --server.port=233
 **物品检索**
 ![物品检索](https://images.gitee.com/uploads/images/2019/0721/220759_328d303b_2252189.png "永恒检索（技能 npc 套装 任务 物品）.png")
 **便签功能和购买历史**
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0721/223548_c5cc426f_2252189.png "便签和购买历史.png")
 
-
-####管理功能
+####管理功能<br/>
 **物品管理**
 ![物品管理](https://images.gitee.com/uploads/images/2019/0721/220943_51f4855c_2252189.png "商城出售物品管理.png")
 **商城检索**
