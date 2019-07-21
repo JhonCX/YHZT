@@ -34,7 +34,9 @@ java -jar yhzt-1.0.jar  --server.port=233
 	修改
 	```
         gameserver.security.survey.delay.minute = 20
+        ```
 	为
+        ```
 	gameserver.security.survey.delay.minute = 1
         ```
 	这样购买的物品领取间隔为1分钟
@@ -50,7 +52,7 @@ java -jar yhzt-1.0.jar  --server.port=233
 &emsp;&emsp;4. 新建 Pull Request<br/>
 
 ## 图片展示
-###用户功能###
+###用户功能
 **主题更换**
 ![主题更换](https://images.gitee.com/uploads/images/2019/0721/220417_8d140c02_2252189.png "主题更换页")
 **物品购买**
@@ -64,7 +66,7 @@ java -jar yhzt-1.0.jar  --server.port=233
 **便签功能**
 ![便签功能](https://images.gitee.com/uploads/images/2019/0721/220826_26bf77a9_2252189.png "便签（清除浏览器缓存后 保存的内容清空）.png")![购买历史](https://images.gitee.com/uploads/images/2019/0721/220851_59889069_2252189.png "获取物品历史.png")
 
-###管理功能###
+###管理功能
 **物品管理**
 ![物品管理](https://images.gitee.com/uploads/images/2019/0721/220943_51f4855c_2252189.png "商城出售物品管理.png")
 **商城检索**
