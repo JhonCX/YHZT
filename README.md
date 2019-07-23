@@ -7,6 +7,7 @@
 ## 使用
 &emsp;&emsp;JDK1.8 <br/>
 &emsp;&emsp;spring boot  <br/>
+&emsp;&emsp;Maven <br/>
 &emsp;&emsp;MybatisPlus  <br/>
 &emsp;&emsp;shrio  <br/>
 &emsp;&emsp;EasyWeb UI
