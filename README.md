@@ -7,6 +7,8 @@
 ## 使用
 &emsp;&emsp;JDK1.8 <br/>
 &emsp;&emsp;spring boot  <br/>
+&emsp;&emsp;MybatisPlus  <br/>
+&emsp;&emsp;shrio  <br/>
 &emsp;&emsp;EasyWeb UI
 
 ## 安装教程
@@ -23,32 +25,30 @@ color 2E
 echo. 
 java -jar yhzt-1.0.jar  --server.port=233 
 ```
-&emsp;&emsp;其中 `--server.port=233`中  **233** 可以修改为自定义的端口, `新梦商城`可以修改为任意名称。
+&emsp;&emsp;其中 `--server.port=233`中  **233** 可以修改为自定义的端口, `新梦商城`可以修改为任意名称, ***SET PATH="JRE1.8\bin"*** 引号里填写`JRE`的`bin`目录路径。
 
 ## 使用说明
 
-&emsp;&emsp;1. 进入管理入口 需要GM等级大于等于5<br/>
-&emsp;&emsp;2. 商城购买物品通过调查问卷领取 延时在一分钟<br/>
-&emsp;&emsp;3. 商城默认领取间隔为20分钟 <br/>
-&emsp;&emsp;	修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
-&emsp;&emsp;	```
-                gameserver.security.survey.delay.minute = 20
-                ```<br/>
-&emsp;&emsp;	为<br/>
-&emsp;&emsp;    ```
-            	gameserver.security.survey.delay.minute = 1
-                ```<br/>
-&emsp;&emsp;	这样购买的物品领取间隔为1分钟<br/>
-&emsp;&emsp;4.启动商城后 浏览器访问 localhost:233 即可打开商城登录页面<br/>
-&emsp;&emsp;5.商城币为游戏内的 **金功勋勋章** **id：186000030**  因为有延迟，所以获取金功勋章后需要小退才能同步到商城<br/>
-&emsp;&emsp;6.商城币严格按照数据库数值计算，游戏内的**金功勋勋章数量**仅供参考<br/>
+1. 进入管理入口 需要GM等级大于等于5<br/>
+2. 商城购买物品通过调查问卷领取 延时在一分钟<br/>
+3. 商城默认领取间隔为20分钟 <br/>
+修改 **AL-Game\config\main** 下的 **security.properties** 文件 <br/>
+```
+gameserver.security.survey.delay.minute = 20
+为
+gameserver.security.survey.delay.minute = 1
+这样购买的物品领取间隔为1分钟
+```
+4.启动商城后 浏览器访问 localhost:233 即可打开商城登录页面<br/>
+5.商城币为游戏内的 **金功勋勋章** **id：186000030**  因为有延迟，所以获取金功勋章后需要小退才能同步到商城<br/>
+6.商城币严格按照数据库数值计算，游戏内的**金功勋勋章数量**仅供参考<br/>
 
 ## 参与贡献
 
-&emsp;&emsp;1. Fork 本仓库<br/>
-&emsp;&emsp;2. 新建 yhzt_xxx 分支<br/>
-&emsp;&emsp;3. 提交代码<br/>
-&emsp;&emsp;4. 新建 Pull Request<br/>
+1. Fork 本仓库<br/>
+2. 新建 yhzt_xxx 分支<br/>
+3. 提交代码<br/>
+4. 新建 Pull Request<br/>
 
 ## 用户功能
 **主题更换**
